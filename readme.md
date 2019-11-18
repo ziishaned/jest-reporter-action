@@ -2,6 +2,8 @@
 
 This action comments a pull request with the jest code coverage
 
+![jest-reporter-action](https://imgur.com/c3PMb0I.png)
+
 ## Inputs
 
 ### `github-token`
