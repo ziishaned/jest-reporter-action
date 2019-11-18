@@ -1,0 +1,25 @@
+{
+  "name": "jest-codecov-report",
+  "version": "0.0.1",
+  "description": "Comments a pull request with the jest code coverage",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ziishaned/jest-codecov-report"
+  },
+  "keywords": [
+    "actions",
+    "pull-request",
+    "comment",
+    "message"
+  ],
+  "author": "Zeeshan Ahmad",
+  "bugs": {
+    "url": "https://github.com/ziishaned/jest-codecov-report/issues"
+  },
+  "homepage": "https://github.com/ziishaned/jest-codecov-report#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.0",
+    "@actions/github": "^1.1.0"
+  }
+}

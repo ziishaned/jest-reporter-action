@@ -1,0 +1,10 @@
+name: "Jest Code Coverage Report"
+description: "Comments a pull request with the jest code coverage"
+author: "Zeeshan Ahmad"
+inputs:
+  github-token:
+    description: "Github token"
+    required: true
+runs:
+  using: "node12"
+  main: "index.js"
