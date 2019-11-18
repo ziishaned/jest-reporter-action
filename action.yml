@@ -1,6 +1,9 @@
 name: "Jest Code Coverage Report"
 description: "Comments a pull request with the jest code coverage"
 author: "Zeeshan Ahmad"
+branding:
+  icon: "check-square"
+  color: "green"
 inputs:
   github-token:
     description: "Github token"
