@@ -17,7 +17,7 @@ const main = async () => {
   );
   const prNumber = commitPRs.data[0].number;
 
-  const codeCoverage = execSync("npx jest").toString();
+  const codeCoverage = execSync("npx jest --forceExit").toString();
   let coveragePercentage = execSync(
     "npx coverage-percentage ./coverage/lcov.info --lcov"
   ).toString();
