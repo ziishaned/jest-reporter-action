@@ -12,5 +12,5 @@ inputs:
     description: "Specify a command to run the tests"
     required: false
 runs:
-  using: "node12"
+  using: "node10"
   main: "index.js"
