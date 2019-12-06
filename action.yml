@@ -8,6 +8,9 @@ inputs:
   github-token:
     description: "Github token"
     required: true
+  test-command:
+    description: "Specify a command to run the tests"
+    required: false
 runs:
   using: "node12"
   main: "index.js"
