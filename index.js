@@ -6,6 +6,7 @@ const main = async () => {
   const repoName = context.repo.repo;
   const repoOwner = context.repo.owner;
   const githubToken = core.getInput("github-token");
+  const testCommand = core.getInput("test-command") || "npx jest";
 
   const githubClient = new GitHub(githubToken);
   const commitPRs = await githubClient.repos.listPullRequestsAssociatedWithCommit(
@@ -17,7 +18,7 @@ const main = async () => {
   );
   const prNumber = commitPRs.data[0].number;
 
-  const codeCoverage = execSync("npx jest").toString();
+  const codeCoverage = execSync(testCommand).toString();
   let coveragePercentage = execSync(
     "npx coverage-percentage ./coverage/lcov.info --lcov"
   ).toString();
