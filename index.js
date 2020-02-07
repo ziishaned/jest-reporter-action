@@ -9,19 +9,11 @@ const main = async () => {
   const testCommand = core.getInput("test-command") || "npx jest";
   const prNumber = context.issue.number;
   const githubClient = new GitHub(githubToken);
-
   const codeCoverage = execSync(testCommand).toString();
-  let coveragePercentage = execSync(
-    "npx coverage-percentage ./coverage/lcov.info --lcov"
-  ).toString();
-  coveragePercentage = parseFloat(coveragePercentage).toFixed(2);
 
-  const commentBody = `<p>Total Coverage: <code>${coveragePercentage}</code></p>
-<details><summary>Coverage report</summary>
-<p>
-<pre>${codeCoverage}</pre>
-</p>
-</details>`;
+  const commentBody = `## Code Coverage Summary
+\`\`\`${codeCoverage}\`\`\`
+`;
 
   await githubClient.issues.createComment({
     repo: repoName,
