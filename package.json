@@ -1,6 +1,6 @@
 {
   "name": "jest-reporter-action",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "Comments a pull request with the jest code coverage",
   "main": "index.js",
   "repository": {
