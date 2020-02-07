@@ -7,16 +7,8 @@ const main = async () => {
   const repoOwner = context.repo.owner;
   const githubToken = core.getInput("github-token");
   const testCommand = core.getInput("test-command") || "npx jest";
-
+  const prNumber = context.issue.number;
   const githubClient = new GitHub(githubToken);
-  const commitPRs = await githubClient.repos.listPullRequestsAssociatedWithCommit(
-    {
-      repo: repoName,
-      owner: repoOwner,
-      commit_sha: context.sha
-    }
-  );
-  const prNumber = commitPRs.data[0].number;
 
   const codeCoverage = execSync(testCommand).toString();
   let coveragePercentage = execSync(
