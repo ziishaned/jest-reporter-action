@@ -1,7 +1,20 @@
 const core = require("@actions/core");
 const fs = require("fs");
+const coverage = require("coverage-percentage");
 const { execSync } = require("child_process");
 const { GitHub, context } = require("@actions/github");
+
+function getPercentage() {
+	return new Promise(function (resolve, reject) {
+		const coveragePercentage = coverage("./coverage/lcov.info", "lcov", function (err, data) {
+			if (err) {
+				reject(err)
+				return
+			}
+			resolve(data)
+		})
+	})
+}
 
 const main = async () => {
   const repoName = context.repo.repo;
@@ -20,10 +33,7 @@ const main = async () => {
 	const prNumber = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8')).pull_request.number
 
   const codeCoverage = execSync(testCommand).toString();
-  let coveragePercentage = execSync(
-    "npx coverage-percentage ./coverage/lcov.info --lcov"
-  ).toString();
-  coveragePercentage = parseFloat(coveragePercentage).toFixed(2);
+	const coveragePercentage = (await getPercentage()).toFixed(2)
 
   const commentBody = `<p>Total Coverage: <code>${coveragePercentage}</code></p>
 <details><summary>Coverage report</summary>

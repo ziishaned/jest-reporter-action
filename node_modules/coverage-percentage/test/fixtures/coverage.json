@@ -1,0 +1,260 @@
+{
+  "instrumentation": "node-jscoverage",
+  "sloc": 27,
+  "hits": 19,
+  "misses": 8,
+  "coverage": 70.37037037037037,
+  "files": [
+    {
+      "filename": "tellmecov.js",
+      "coverage": 70.37037037037037,
+      "hits": 19,
+      "misses": 8,
+      "sloc": 27,
+      "source": {
+        "1": {
+          "source": "var fs = require('fs');",
+          "coverage": 1
+        },
+        "2": {
+          "source": "var gm = require('gm');",
+          "coverage": 1
+        },
+        "3": {
+          "source": "",
+          "coverage": ""
+        },
+        "4": {
+          "source": "// Prototype with Constructor for new",
+          "coverage": ""
+        },
+        "5": {
+          "source": "var tellmecov = function() { ",
+          "coverage": 1
+        },
+        "6": {
+          "source": "    // pass",
+          "coverage": ""
+        },
+        "7": {
+          "source": "};",
+          "coverage": ""
+        },
+        "8": {
+          "source": "",
+          "coverage": ""
+        },
+        "9": {
+          "source": "tellmecov.prototype.getCoverageClass = function(argRank) {",
+          "coverage": 1
+        },
+        "10": {
+          "source": "    var rank = parseInt(argRank);",
+          "coverage": 1
+        },
+        "11": {
+          "source": "    if (rank &gt;= 75) { return 'high'; }",
+          "coverage": 2
+        },
+        "12": {
+          "source": "    else if (rank &gt;= 50) { return 'medium'; }",
+          "coverage": 0
+        },
+        "13": {
+          "source": "    else if (rank &gt;= 25) { return 'low'; }",
+          "coverage": 0
+        },
+        "14": {
+          "source": "    else { return 'unknown'; }",
+          "coverage": 0
+        },
+        "15": {
+          "source": "};",
+          "coverage": ""
+        },
+        "16": {
+          "source": "",
+          "coverage": ""
+        },
+        "17": {
+          "source": "tellmecov.prototype.setCoverageJson = function(argJson) {",
+          "coverage": 1
+        },
+        "18": {
+          "source": "    this.coveragesjon = argJson;",
+          "coverage": 0
+        },
+        "19": {
+          "source": "    this.checkCoverageJson(); // check json",
+          "coverage": 0
+        },
+        "20": {
+          "source": "};",
+          "coverage": ""
+        },
+        "21": {
+          "source": "",
+          "coverage": ""
+        },
+        "22": {
+          "source": "tellmecov.prototype.readCoverageJson = function(argFilePath) {",
+          "coverage": 1
+        },
+        "23": {
+          "source": "    var buffer = fs.readFileSync(argFilePath); // Synchronous version of fs.readFile, If encoding is specified then this function returns a string. Otherwise it returns a buffer.",
+          "coverage": 2
+        },
+        "24": {
+          "source": "    this.coveragesjon = JSON.parse(buffer.toString());",
+          "coverage": 2
+        },
+        "25": {
+          "source": "    this.checkCoverageJson(); // check json",
+          "coverage": 2
+        },
+        "26": {
+          "source": "};",
+          "coverage": ""
+        },
+        "27": {
+          "source": "",
+          "coverage": ""
+        },
+        "28": {
+          "source": "tellmecov.prototype.checkCoverageJson = function() {",
+          "coverage": 1
+        },
+        "29": {
+          "source": "    if ( ! 'coverage' in this.coveragesjon ) {",
+          "coverage": 2
+        },
+        "30": {
+          "source": "        throw new Error('json without coverage opt');",
+          "coverage": 0
+        },
+        "31": {
+          "source": "    }",
+          "coverage": ""
+        },
+        "32": {
+          "source": "};",
+          "coverage": ""
+        },
+        "33": {
+          "source": "",
+          "coverage": ""
+        },
+        "34": {
+          "source": "tellmecov.prototype.getGlobalCoverageValue = function() {",
+          "coverage": 1
+        },
+        "35": {
+          "source": "    return this.coveragesjon.coverage;",
+          "coverage": 3
+        },
+        "36": {
+          "source": "};",
+          "coverage": ""
+        },
+        "37": {
+          "source": "",
+          "coverage": ""
+        },
+        "38": {
+          "source": "tellmecov.prototype.getGlobalCoverageBadge = function(argDestFilePath) {",
+          "coverage": 1
+        },
+        "39": {
+          "source": "",
+          "coverage": ""
+        },
+        "40": {
+          "source": "    var imgSource = __dirname+'/image/'+this.getCoverageClass(this.getGlobalCoverageValue())+'.png';",
+          "coverage": 1
+        },
+        "41": {
+          "source": "    gm(imgSource).font('DejaVu Sans Semi-Condensed').fontSize(10).fill('white').drawText(63, 10, ''+Math.ceil(this.getGlobalCoverageValue()))",
+          "coverage": 1
+        },
+        "42": {
+          "source": "        .write(argDestFilePath, function (err) {",
+          "coverage": ""
+        },
+        "43": {
+          "source": "            if (err) { ",
+          "coverage": 0
+        },
+        "44": {
+          "source": "                throw new Error(err);",
+          "coverage": 0
+        },
+        "45": {
+          "source": "            } else { ",
+          "coverage": ""
+        },
+        "46": {
+          "source": "                //pass, write only",
+          "coverage": ""
+        },
+        "47": {
+          "source": "            }",
+          "coverage": ""
+        },
+        "48": {
+          "source": "        })",
+          "coverage": ""
+        },
+        "49": {
+          "source": "    ;",
+          "coverage": ""
+        },
+        "50": {
+          "source": "};",
+          "coverage": ""
+        },
+        "51": {
+          "source": "",
+          "coverage": ""
+        },
+        "52": {
+          "source": "module.exports = tellmecov;",
+          "coverage": 1
+        }
+      }
+    }
+  ],
+  "stats": {
+    "suites": 1,
+    "tests": 2,
+    "passes": 2,
+    "failures": 0,
+    "start": "2012-08-03T15:56:39.590Z",
+    "end": "2012-08-03T15:56:39.595Z",
+    "duration": 5
+  },
+  "tests": [
+    {
+      "title": "test getGlobalCoverageValue",
+      "fullTitle": "tellmecov test getGlobalCoverageValue",
+      "duration": 1
+    },
+    {
+      "title": "test getGlobalCoverageBadge",
+      "fullTitle": "tellmecov test getGlobalCoverageBadge",
+      "duration": 2
+    }
+  ],
+  "failures": [],
+  "passes": [
+    {
+      "title": "test getGlobalCoverageValue",
+      "fullTitle": "tellmecov test getGlobalCoverageValue",
+      "duration": 1
+    },
+    {
+      "title": "test getGlobalCoverageBadge",
+      "fullTitle": "tellmecov test getGlobalCoverageBadge",
+      "duration": 2
+    }
+  ]
+}

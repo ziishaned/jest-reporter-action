@@ -100,6 +100,13 @@ btoa-lite@^1.0.0:
   resolved "https://registry.yarnpkg.com/btoa-lite/-/btoa-lite-1.0.0.tgz#337766da15801210fdd956c22e9c6891ab9d0337"
   integrity sha1-M3dm2hWAEhD92VbCLpxokaudAzc=
 
+coverage-percentage@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/coverage-percentage/-/coverage-percentage-0.0.2.tgz#5fd53d1b1563e58ae3eb721afba3926200327cc6"
+  integrity sha1-X9U9GxVj5Yrj63Ia+6OSYgAyfMY=
+  dependencies:
+    lcov-parse "0.0.6"
+
 cross-spawn@^6.0.0:
   version "6.0.5"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-6.0.5.tgz#4a5ec7c64dfae22c3a14124dbacdee846d80cbc4"
@@ -164,6 +171,11 @@ isobject@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-4.0.0.tgz#3f1c9155e73b192022a80819bacd0343711697b0"
   integrity sha512-S/2fF5wH8SJA/kmwr6HYhK/RI/OkhD84k8ntalo0iJjZikgq1XFvR5M8NPT1x5F7fBwCG3qHfnzeP/Vh/ZxCUA==
+
+lcov-parse@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/lcov-parse/-/lcov-parse-0.0.6.tgz#819e5da8bf0791f9d3f39eea5ed1868187f11175"
+  integrity sha1-gZ5dqL8HkfnT857qXtGGgYfxEXU=
 
 lodash.get@^4.4.2:
   version "4.4.2"
