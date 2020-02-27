@@ -1,4 +1,5 @@
 const core = require("@actions/core");
+const fs = require("fs");
 const { execSync } = require("child_process");
 const { GitHub, context } = require("@actions/github");
 
@@ -16,7 +17,7 @@ const main = async () => {
       commit_sha: context.sha
     }
   );
-  const prNumber = commitPRs.data[0].number;
+	const prNumber = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8')).pull_request.number
 
   const codeCoverage = execSync(testCommand).toString();
   let coveragePercentage = execSync(
