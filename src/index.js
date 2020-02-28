@@ -27,6 +27,8 @@ async function main() {
 		prefix: process.env.GITHUB_WORKSPACE,
 	}
 
+	console.log("Event data", event)
+	console.log("Building html comment")
 	const comment = `
 Total Coverage: <b>${percentage(lcov).toFixed(2)}%</b>
 
@@ -50,4 +52,7 @@ async function eventData() {
 	return JSON.parse(data)
 }
 
-main().catch(err => core.setFailed(err.message))
+main().catch(function (err) {
+	console.log(err)
+	core.setFailed(err.message)
+})
