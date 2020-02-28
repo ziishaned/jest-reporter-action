@@ -3,6 +3,7 @@ import core from '@actions/core'
 import { GitHub, context } from '@actions/github'
 
 import { parse, percentage } from "./lcov"
+import { tabulate } from "./tabulate"
 
 async function main() {
 	const token = core.getInput("github-token")
@@ -19,9 +20,12 @@ async function main() {
 	const lcov = await parse(raw)
 	const comment = `
 Total Coverage: \`${percentage(lcov).toFixed(2)}%\`
-`
 
-	// TODO: add more
+<details>
+	<summary>Coverage Report</summary>
+	${tabulate(lcov)}
+</details>
+`
 
 	await new GitHub(token).issues.createComment({
 		repo: context.repo.repo,
