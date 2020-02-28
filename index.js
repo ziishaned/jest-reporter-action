@@ -34,16 +34,14 @@ const main = async () => {
     return
   }
 
-  const commentBody = `
-    <div>
-      <p>Total Coverage: <code>${coveragePercentage}%</code></p>
+  const commentBody = `<div>
+    <p>Total Coverage: <code>${coveragePercentage}%</code></p>
       <details><summary>Coverage report</summary>
         <p>
           <pre>${codeCoverage}</pre>
         </p>
       </details>
-    </div>
-  `;
+    </div>`;
 
   await githubClient.issues.createComment({
     repo: repoName,
