@@ -22794,8 +22794,7 @@ function tabulate (lcov, options = {}) {
 	const rows = walk(t, 0, '', options);
 
 	return (
-		`
-		<table>
+		`<table>
 			<tbody>
 				${head}
 				${rows.join("")}
@@ -22824,6 +22823,10 @@ function walk(tree, depth, prefix, options) {
 
 function toFolder (prefix, key, depth) {
 	const path = `${prefix}/${key}`.replace(/^\//, "");
+	if (path === "") {
+			return ""
+	}
+
 	return tr(
 		`<td colspan='5'><b>${path}</b></td>`,
 	)
@@ -22917,7 +22920,7 @@ async function main$1() {
 		repository: `${github_1.owner}/${github_1.repo}`,
 		pr: event.pull_request.number,
 		commit: event.after,
-		prefix: process.env.GITHUB_WORKSPACE,
+		prefix: `${process.env.GITHUB_WORKSPACE}/`,
 	};
 
 	console.log("Event data", event);

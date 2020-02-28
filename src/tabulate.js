@@ -13,8 +13,7 @@ export function tabulate (lcov, options = {}) {
 	const rows = walk(t, 0, '', options)
 
 	return (
-		`
-		<table>
+		`<table>
 			<tbody>
 				${head}
 				${rows.join("")}
@@ -43,6 +42,10 @@ function walk(tree, depth, prefix, options) {
 
 function toFolder (prefix, key, depth) {
 	const path = `${prefix}/${key}`.replace(/^\//, "")
+	if (path === "") {
+			return ""
+	}
+
 	return tr(
 		`<td colspan='5'><b>${path}</b></td>`,
 	)

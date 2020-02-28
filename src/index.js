@@ -23,7 +23,7 @@ async function main() {
 		repository: `${context.owner}/${context.repo}`,
 		pr: event.pull_request.number,
 		commit: event.after,
-		prefix: process.env.GITHUB_WORKSPACE,
+		prefix: `${process.env.GITHUB_WORKSPACE}/`,
 	}
 
 	console.log("Event data", event)
