@@ -1,4 +1,5 @@
-import { tree } from './tree'
+import { tree } from "./tree"
+import { th, tr, td, table, tbody, a, b, span, fragment } from "./html"
 
 // Tabulate the lcov data in a HTML table.
 export function tabulate (lcov, options = {}) {
@@ -12,14 +13,11 @@ export function tabulate (lcov, options = {}) {
 	const t = tree(lcov, options)
 	const rows = walk(t, 0, '', options)
 
-	return (
-		`<table>
-			<tbody>
-				${head}
-				${rows.join("")}
-			</tbody>
-		</table>
-		`
+	return table(
+		tbody(
+			head,
+			...rows,
+		)
 	)
 }
 
@@ -47,7 +45,10 @@ function toFolder (prefix, key, depth) {
 	}
 
 	return tr(
-		`<td colspan='5'><b>${path}</b></td>`,
+		td(
+			{ colspan: 5 },
+			b(path),
+		)
 	)
 }
 
@@ -66,7 +67,10 @@ function filename(file, options) {
 	const href = `https://github.com/${options.repository}/blob/${options.commit}/${relative}`
 	const parts = relative.split("/")
 	const last = parts[parts.length - 1]
-	return `&nbsp; &nbsp;<a href='${href}'>${last}</a>`
+	return fragment(
+		`&nbsp; &nbsp;`,
+		a({ href }, last),
+	)
 }
 
 function percentage(item) {
@@ -79,22 +83,10 @@ function percentage(item) {
 
 	const tag =
 		value === 100
-			? 'span'
-			: 'b'
+			? span
+			: b
 
-	return `<${tag}>${rounded}%</${tag}>`
-}
-
-function th(...str) {
-	return `<th>${str.join('\n')}</th>`
-}
-
-function td (...str) {
-	return `<td>${str.join('\n')}</td>`
-}
-
-function tr (...str) {
-	return `<tr>${str.join('\n')}</tr>`
+	return tag(`${rounded}%`)
 }
 
 function uncovered(file, options) {
@@ -115,7 +107,7 @@ function uncovered(file, options) {
 			.map(function (line) {
 				const relative = file.file.replace(options.prefix, '')
 				const href = `https://github.com/${options.repository}/blob/${options.commit}/${relative}#L${line}`
-				return `<a href=${href}>${line}</a>`
+				return a({ href }, line)
 			})
 			.join(", ")
 	)

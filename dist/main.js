@@ -22781,6 +22781,37 @@ function tree(files, options) {
 	return result
 }
 
+function tag(name) {
+	return function (...children) {
+		const props =
+			typeof children[0] === "object"
+				? Object.keys(children[0]).map(key => `${key}='${children[0][key]}'`).join(" ")
+				: "";
+
+		const c =
+			typeof children[0] === "string"
+				? children
+				: children.slice(1);
+
+		return `<${name} ${props}>${c.join("")}</${name}>`
+	}
+}
+
+const details = tag("details");
+const summary = tag("summary");
+const tr = tag("tr");
+const td = tag("td");
+const th = tag("th");
+const b = tag("b");
+const table = tag("table");
+const tbody = tag("tbody");
+const a = tag("a");
+const span = tag("span");
+
+const fragment = function (...children) {
+	return children.join("")
+};
+
 // Tabulate the lcov data in a HTML table.
 function tabulate (lcov, options = {}) {
 	const head = tr(
@@ -22793,14 +22824,11 @@ function tabulate (lcov, options = {}) {
 	const t = tree(lcov, options);
 	const rows = walk(t, 0, '', options);
 
-	return (
-		`<table>
-			<tbody>
-				${head}
-				${rows.join("")}
-			</tbody>
-		</table>
-		`
+	return table(
+		tbody(
+			head,
+			...rows,
+		)
 	)
 }
 
@@ -22828,7 +22856,10 @@ function toFolder (prefix, key, depth) {
 	}
 
 	return tr(
-		`<td colspan='5'><b>${path}</b></td>`,
+		td(
+			{ colspan: 5 },
+			b(path),
+		)
 	)
 }
 
@@ -22847,7 +22878,10 @@ function filename(file, options) {
 	const href = `https://github.com/${options.repository}/blob/${options.commit}/${relative}`;
 	const parts = relative.split("/");
 	const last = parts[parts.length - 1];
-	return `&nbsp; &nbsp;<a href='${href}'>${last}</a>`
+	return fragment(
+		`&nbsp; &nbsp;`,
+		a({ href }, last),
+	)
 }
 
 function percentage$1(item) {
@@ -22860,22 +22894,10 @@ function percentage$1(item) {
 
 	const tag =
 		value === 100
-			? 'span'
-			: 'b';
+			? span
+			: b;
 
-	return `<${tag}>${rounded}%</${tag}>`
-}
-
-function th(...str) {
-	return `<th>${str.join('\n')}</th>`
-}
-
-function td (...str) {
-	return `<td>${str.join('\n')}</td>`
-}
-
-function tr (...str) {
-	return `<tr>${str.join('\n')}</tr>`
+	return tag(`${rounded}%`)
 }
 
 function uncovered(file, options) {
@@ -22896,7 +22918,7 @@ function uncovered(file, options) {
 			.map(function (line) {
 				const relative = file.file.replace(options.prefix, '');
 				const href = `https://github.com/${options.repository}/blob/${options.commit}/${relative}#L${line}`;
-				return `<a href=${href}>${line}</a>`
+				return a({ href }, line)
 			})
 			.join(", ")
 	)
@@ -22923,16 +22945,15 @@ async function main$1() {
 		prefix: `${process.env.GITHUB_WORKSPACE}/`,
 	};
 
-	console.log("Event data", event);
-	console.log("Building html comment");
-	const comment = `
-Total Coverage: <b>${percentage(lcov).toFixed(2)}%</b>
-
-<details>
-	<summary>Coverage Report</summary>
-	${tabulate(lcov, options)}
-</details>
-`;
+	const comment = fragment(
+		"Total Coverage: ",
+		b(`${percentage(lcov).toFixed(2)}%`),
+		"\n\n",
+		details(
+			summary("Coverage Report"),
+			tabulate(lcov, options),
+		)
+	);
 
 	await new github_2(token).issues.createComment({
 		repo: github_1.repo.repo,

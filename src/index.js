@@ -4,6 +4,7 @@ import { GitHub, context } from '@actions/github'
 
 import { parse, percentage } from "./lcov"
 import { tabulate } from "./tabulate"
+import { details, summary, b, fragment } from "./html"
 
 async function main() {
 	const token = core.getInput("github-token")
@@ -26,16 +27,15 @@ async function main() {
 		prefix: `${process.env.GITHUB_WORKSPACE}/`,
 	}
 
-	console.log("Event data", event)
-	console.log("Building html comment")
-	const comment = `
-Total Coverage: <b>${percentage(lcov).toFixed(2)}%</b>
-
-<details>
-	<summary>Coverage Report</summary>
-	${tabulate(lcov, options)}
-</details>
-`
+	const comment = fragment(
+		"Total Coverage: ",
+		b(`${percentage(lcov).toFixed(2)}%`),
+		"\n\n",
+		details(
+			summary("Coverage Report"),
+			tabulate(lcov, options),
+		)
+	)
 
 	await new GitHub(token).issues.createComment({
 		repo: context.repo.repo,
