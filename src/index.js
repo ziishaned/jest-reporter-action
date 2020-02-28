@@ -19,7 +19,7 @@ async function main() {
 
 	const lcov = await parse(raw)
 	const comment = `
-Total Coverage: \`${percentage(lcov).toFixed(2)}%\`
+Total Coverage: <b>${percentage(lcov).toFixed(2)}%</b>`
 
 <details>
 	<summary>Coverage Report</summary>
