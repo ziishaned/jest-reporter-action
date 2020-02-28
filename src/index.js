@@ -9,14 +9,12 @@ async function main() {
 	const token = core.getInput("github-token")
 	const lcovFile = core.getInput("lcov-file") || "./coverage/lcov.info"
 
-	const raw = await fs.readFile(lcovFile).catch(err => null)
+	const raw = await fs.readFile(lcovFile, "utf-8").catch(err => null)
 
 	if (!raw) {
 		console.log(`No coverage report found at '${lcovFile}', exiting...`)
 		return
 	}
-
-	console.log('RAW', raw)
 
 	const event = await eventData()
 	const lcov = await parse(raw)
