@@ -23,13 +23,6 @@ const main = async () => {
   const testCommand = core.getInput("test-command") || "npx jest";
 
   const githubClient = new GitHub(githubToken);
-  const commitPRs = await githubClient.repos.listPullRequestsAssociatedWithCommit(
-    {
-      repo: repoName,
-      owner: repoOwner,
-      commit_sha: context.sha
-    }
-  );
   const prNumber = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8')).pull_request.number
   const codeCoverage = execSync(testCommand).toString();
 
