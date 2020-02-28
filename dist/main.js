@@ -22903,13 +22903,14 @@ async function main$1() {
 	const token = core$1.getInput("github-token");
 	const lcovFile = core$1.getInput("lcov-file") || "./coverage/lcov.info";
 
-	let raw = null;
-	try {
-		const raw = await fs.promises.readFile(lcovFile);
-	} catch(err) {
+	const raw = await fs.promises.readFile(lcovFile).catch(err => null);
+
+	if (!raw) {
 		console.log(`No coverage report found at '${lcovFile}', exiting...`);
 		return
 	}
+
+	console.log('RAW', raw);
 
 	const event = await eventData();
 	const lcov = await parse$2(raw);
