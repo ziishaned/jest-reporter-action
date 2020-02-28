@@ -3,12 +3,12 @@ import lcov from "lcov-parse"
 // Parse lcov string into lcov data
 export function parse(data) {
 	return new Promise(function (resolve, reject) {
-		parse(data, function (err, res) {
+		lcov(data, function (err, res) {
 			if (err) {
 				reject(err)
 				return
 			}
-			resolve(data)
+			resolve(res)
 		})
 	})
 }
