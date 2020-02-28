@@ -21,6 +21,6 @@
   "dependencies": {
     "@actions/core": "^1.2.0",
     "@actions/github": "^1.1.0",
-    "coverage-percentage": "^0.0.2"
+    "lcov-parse": "^1.0.0"
   }
 }

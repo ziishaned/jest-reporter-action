@@ -1,6 +1,6 @@
-name: "Jest Code Coverage Report"
-description: "Comments a pull request with the jest code coverage"
-author: "Zeeshan Ahmad"
+name: "Code Coverage Report"
+description: "Comments a pull request with the code coverage"
+author: "Romeo Van Snick"
 branding:
   icon: "check-square"
   color: "green"
@@ -8,8 +8,8 @@ inputs:
   github-token:
     description: "Github token"
     required: true
-  test-command:
-    description: "Specify a command to run the tests"
+	lcov-file:
+    description: "The location of the lcov.info file"
     required: false
 runs:
   using: "node12"
