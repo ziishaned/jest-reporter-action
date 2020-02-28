@@ -22917,7 +22917,7 @@ async function main$1() {
 	const lcov = await parse$2(raw);
 
 	const options = {
-		repository: `${github_1.owner}/${github_1.repo}`,
+		repository: `${github_1.repo.owner}/${github_1.repo.repo}`,
 		pr: event.pull_request.number,
 		commit: event.after,
 		prefix: `${process.env.GITHUB_WORKSPACE}/`,
