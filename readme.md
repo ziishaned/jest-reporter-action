@@ -1,8 +1,8 @@
 # Jest reporter action
 
-This action comments a pull request with the jest code coverage
+This action comments a pull request with the jest code coverage.
 
-![jest-reporter-action](https://imgur.com/ustWwwN.png)
+![jest-reporter-action](shot.png)
 
 ## Inputs
 
@@ -10,15 +10,16 @@ This action comments a pull request with the jest code coverage
 
 **Required** Github token.
 
-### `test-command`
+### `lcov-file`
 
-**Optional** A custom command to run the tests. (defaults to `npx jest` if not specified)
+**Optional** The location of the lcov file to parse. Defaults to
+`./coverage/lcov.info`
 
 ## Example usage
 
 ```yml
-uses: ziishaned/jest-reporter-action@v0.0.1
+uses: romeovs/lcov-reporter-action@v0.2.6
 with:
   github-token: ${{ secrets.GITHUB_TOKEN }}
-  test-command: "yarn jest --coverage"
+  lcov-file: ./coverage/lcov.info
 ```
