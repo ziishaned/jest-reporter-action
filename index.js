@@ -31,9 +31,15 @@ const main = async () => {
     }
   );
   const prNumber = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8')).pull_request.number
-
   const codeCoverage = execSync(testCommand).toString();
-  const coveragePercentage = (await getPercentage()).toFixed(2)
+
+  let coveragePercentage = null
+  try {
+    coveragePercentage = (await getPercentage()).toFixed(2)
+  } catch (err) {
+    console.log('No coverage report found, exiting...')
+    return
+  }
 
   const commentBody = `
     <div>
