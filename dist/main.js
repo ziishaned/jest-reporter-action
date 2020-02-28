@@ -22911,20 +22911,31 @@ async function main$1() {
 		return
 	}
 
+	const event = await eventData();
 	const lcov = await parse$2(raw);
+
+	const options = {
+		repository: `${github_1.owner}/${github_1.repo}`,
+		pr: event.pull_request.number,
+		commit: event.after,
+		prefix: process.env.GITHUB_WORKSPACE,
+	};
+
+	console.log("Event data", event);
+	console.log("Building html comment");
 	const comment = `
-Total Coverage: \`${percentage(lcov).toFixed(2)}%\`
+Total Coverage: <b>${percentage(lcov).toFixed(2)}%</b>
 
 <details>
 	<summary>Coverage Report</summary>
-	${tabulate(lcov)}
+	${tabulate(lcov, options)}
 </details>
 `;
 
 	await new github_2(token).issues.createComment({
 		repo: github_1.repo.repo,
 		owner: github_1.repo.owner,
-		issue_number: (await eventData()).pull_request.number,
+		issue_number: event.pull_request.number,
 		body: comment,
 	});
 }
@@ -22935,4 +22946,7 @@ async function eventData() {
 	return JSON.parse(data)
 }
 
-main$1().catch(err => core$1.setFailed(err.message));
+main$1().catch(function (err) {
+	console.log(err);
+	core$1.setFailed(err.message);
+});
