@@ -35,7 +35,7 @@ const main = async () => {
   const codeCoverage = execSync(testCommand).toString();
 	const coveragePercentage = (await getPercentage()).toFixed(2)
 
-  const commentBody = `<p>Total Coverage: <code>${coveragePercentage}</code></p>
+  const commentBody = `<p>Total Coverage: <code>${coveragePercentage}%</code></p>
 <details><summary>Coverage report</summary>
 <p>
 <pre>${codeCoverage}</pre>
