@@ -35,12 +35,16 @@ const main = async () => {
   const codeCoverage = execSync(testCommand).toString();
   const coveragePercentage = (await getPercentage()).toFixed(2)
 
-  const commentBody = `<p>Total Coverage: <code>${coveragePercentage}%</code></p>
-<details><summary>Coverage report</summary>
-<p>
-<pre>${codeCoverage}</pre>
-</p>
-</details>`;
+  const commentBody = `
+    <div>
+      <p>Total Coverage: <code>${coveragePercentage}%</code></p>
+      <details><summary>Coverage report</summary>
+        <p>
+          <pre>${codeCoverage}</pre>
+        </p>
+      </details>
+    </div>
+  `;
 
   await githubClient.issues.createComment({
     repo: repoName,
