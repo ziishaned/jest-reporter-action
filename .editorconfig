@@ -1,0 +1,12 @@
+# EditorConfig, see http://EditorConfig.org for a tutorial on how to
+# configure your editor.
+
+root = true
+
+[*]
+    charset = utf-8
+    end_of_line = lf
+    insert_final_newline = true
+    indent_style = tab
+    indent_size = 2
+    trim_trailing_whitespace = true
