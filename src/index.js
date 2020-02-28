@@ -17,20 +17,29 @@ async function main() {
 		return
 	}
 
+	const event = await eventData()
 	const lcov = await parse(raw)
+
+	const options = {
+		repository: `${context.owner}/${context.repo}`,
+		pr: event.pull_request.number,
+		commit: event.after,
+		prefix: process.env.GITHUB_WORKSPACE,
+	}
+
 	const comment = `
-Total Coverage: <b>${percentage(lcov).toFixed(2)}%</b>`
+Total Coverage: <b>${percentage(lcov).toFixed(2)}%</b>
 
 <details>
 	<summary>Coverage Report</summary>
-	${tabulate(lcov)}
+	${tabulate(lcov, options)}
 </details>
 `
 
 	await new GitHub(token).issues.createComment({
 		repo: context.repo.repo,
 		owner: context.repo.owner,
-		issue_number: (await eventData()).pull_request.number,
+		issue_number: event.pull_request.number,
 		body: comment,
 	})
 }
