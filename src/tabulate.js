@@ -30,7 +30,8 @@ function walk(tree, depth, prefix, options) {
 					return toRow(item, options)
 				}
 
-				const head = toFolder(prefix, key, depth)
+				const onlyFolders = Object.values(item).filter(item => Boolean(item.file)).length === 0
+				const head = onlyFolders ? "" : toFolder(prefix, key, depth)
 				const rest = walk(item, depth + 1, `${prefix}/${key}`, options)
 
 				return head + rest.join("")
