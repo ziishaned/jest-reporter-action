@@ -1,6 +1,6 @@
-import { promises as fs } from 'fs'
-import core from '@actions/core'
-import { GitHub, context } from '@actions/github'
+import { promises as fs } from "fs"
+import core from "@actions/core"
+import { GitHub, context } from "@actions/github"
 
 import { parse, percentage } from "./lcov"
 import { tabulate } from "./tabulate"
@@ -46,7 +46,7 @@ async function main() {
 
 // Read the eventData from the GITHUB_EVENT_PATH
 async function eventData() {
-	const data = await fs.readFile(process.env.GITHUB_EVENT_PATH, 'utf8')
+	const data = await fs.readFile(process.env.GITHUB_EVENT_PATH, "utf-8")
 	return JSON.parse(data)
 }
 
