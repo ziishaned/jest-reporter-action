@@ -22785,7 +22785,7 @@ function tag(name) {
 	return function (...children) {
 		const props =
 			typeof children[0] === "object"
-				? Object.keys(children[0]).map(key => `${key}='${children[0][key]}'`).join(" ")
+				? Object.keys(children[0]).map(key => ` ${key}='${children[0][key]}'`).join("")
 				: "";
 
 		const c =
@@ -22793,7 +22793,7 @@ function tag(name) {
 				? children
 				: children.slice(1);
 
-		return `<${name} ${props}>${c.join("")}</${name}>`
+		return `<${name}${props}>${c.join("")}</${name}>`
 	}
 }
 
@@ -22806,7 +22806,7 @@ const b = tag("b");
 const table = tag("table");
 const tbody = tag("tbody");
 const a = tag("a");
-const span = tag("span");
+const code = tag("code");
 
 const fragment = function (...children) {
 	return children.join("")
@@ -22816,7 +22816,7 @@ const fragment = function (...children) {
 function tabulate (lcov, options = {}) {
 	const head = tr(
 		th('File'),
-		th('Branch'),
+		th('Branches'),
 		th('Funcs'),
 		th('Lines'),
 		th('Uncovered Lines'),
@@ -22858,7 +22858,7 @@ function toFolder (prefix, key, depth) {
 	return tr(
 		td(
 			{ colspan: 5 },
-			b(path),
+			b(code(path)),
 		)
 	)
 }
@@ -22879,8 +22879,8 @@ function filename(file, options) {
 	const parts = relative.split("/");
 	const last = parts[parts.length - 1];
 	return fragment(
-		`&nbsp; &nbsp;`,
-		a({ href }, last),
+		'&nbsp; &nbsp;',
+		a({ href }, code(last)),
 	)
 }
 
@@ -22894,7 +22894,7 @@ function percentage$1(item) {
 
 	const tag =
 		value === 100
-			? span
+			? fragment
 			: b;
 
 	return tag(`${rounded}%`)
@@ -22902,12 +22902,12 @@ function percentage$1(item) {
 
 function uncovered(file, options) {
 	const branches =
-		file.branches.details
+		(file.branches ? file.branches.details : [])
 			.filter(branch => branch.taken === 0)
 			.map(branch => branch.line);
 
 	const lines =
-		file.lines.details
+		(file.lines ? file.lines.details : [])
 			.filter(line => line.hit === 0)
 			.map(line => line.line);
 
@@ -22940,7 +22940,6 @@ async function main$1() {
 
 	const options = {
 		repository: `${github_1.repo.owner}/${github_1.repo.repo}`,
-		pr: event.pull_request.number,
 		commit: event.after,
 		prefix: `${process.env.GITHUB_WORKSPACE}/`,
 	};

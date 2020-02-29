@@ -5,7 +5,7 @@ import { th, tr, td, table, tbody, a, b, span, fragment } from "./html"
 export function tabulate (lcov, options = {}) {
 	const head = tr(
 		th('File'),
-		th('Branch'),
+		th('Branches'),
 		th('Funcs'),
 		th('Lines'),
 		th('Uncovered Lines'),

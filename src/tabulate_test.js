@@ -117,7 +117,7 @@ test("tabulate should generate a correct table", function () {
 		tbody(
 			tr(
 				th('File'),
-				th('Branch'),
+				th('Branches'),
 				th('Funcs'),
 				th('Lines'),
 				th('Uncovered Lines'),
