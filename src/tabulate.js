@@ -68,7 +68,7 @@ function filename(file, options) {
 	const parts = relative.split("/")
 	const last = parts[parts.length - 1]
 	return fragment(
-		`&nbsp; &nbsp;`,
+		'&nbsp; &nbsp;',
 		a({ href }, last),
 	)
 }
@@ -83,7 +83,7 @@ function percentage(item) {
 
 	const tag =
 		value === 100
-			? span
+			? fragment
 			: b
 
 	return tag(`${rounded}%`)
@@ -91,12 +91,12 @@ function percentage(item) {
 
 function uncovered(file, options) {
 	const branches =
-		file.branches.details
+		(file.branches ? file.branches.details : [])
 			.filter(branch => branch.taken === 0)
 			.map(branch => branch.line)
 
 	const lines =
-		file.lines.details
+		(file.lines ? file.lines.details : [])
 			.filter(line => line.hit === 0)
 			.map(line => line.line)
 

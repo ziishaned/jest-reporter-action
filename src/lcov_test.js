@@ -106,6 +106,10 @@ end_of_record
 	])
 })
 
+test("parse should fail on invalid lcov", async function () {
+	await expect(parse("invalid")).rejects.toBe("Failed to parse string")
+})
+
 test("percentage should calculate the correct percentage", function () {
 	expect(percentage([
 		{ lines: { hit: 20, found: 25 }},
