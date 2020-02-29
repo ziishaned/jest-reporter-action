@@ -14,7 +14,8 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "rollup -c",
-		"test": "jest --passWithNoTests --coverage"
+		"test": "jest --passWithNoTests --coverage",
+		"local": "babel-node src/cli"
 	},
 	"dependencies": {
 		"@actions/core": "^1.2.0",
@@ -23,6 +24,7 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.8.6",
+		"@babel/node": "^7.8.4",
 		"@babel/preset-env": "^7.8.6",
 		"@rollup/plugin-commonjs": "^11.0.2",
 		"@rollup/plugin-json": "^4.0.2",
