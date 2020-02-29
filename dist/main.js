@@ -22806,7 +22806,6 @@ const b = tag("b");
 const table = tag("table");
 const tbody = tag("tbody");
 const a = tag("a");
-const code = tag("code");
 
 const fragment = function (...children) {
 	return children.join("")
@@ -22841,7 +22840,8 @@ function walk(tree, depth, prefix, options) {
 					return toRow(item, options)
 				}
 
-				const head = toFolder(prefix, key);
+				const onlyFolders = Object.values(item).filter(item => Boolean(item.file)).length === 0;
+				const head = onlyFolders ? "" : toFolder(prefix, key);
 				const rest = walk(item, depth + 1, `${prefix}/${key}`, options);
 
 				return head + rest.join("")
@@ -22858,7 +22858,7 @@ function toFolder (prefix, key, depth) {
 	return tr(
 		td(
 			{ colspan: 5 },
-			b(code(path)),
+			b(path),
 		)
 	)
 }
@@ -22880,7 +22880,7 @@ function filename(file, options) {
 	const last = parts[parts.length - 1];
 	return fragment(
 		'&nbsp; &nbsp;',
-		a({ href }, code(last)),
+		a({ href }, last),
 	)
 }
 
@@ -22964,7 +22964,7 @@ async function main$1() {
 
 // Read the eventData from the GITHUB_EVENT_PATH
 async function eventData() {
-	const data = await fs.promises.readFile(process.env.GITHUB_EVENT_PATH, 'utf8');
+	const data = await fs.promises.readFile(process.env.GITHUB_EVENT_PATH, "utf-8");
 	return JSON.parse(data)
 }
 
