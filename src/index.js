@@ -22,7 +22,6 @@ async function main() {
 
 	const options = {
 		repository: `${context.repo.owner}/${context.repo.repo}`,
-		pr: event.pull_request.number,
 		commit: event.after,
 		prefix: `${process.env.GITHUB_WORKSPACE}/`,
 	}

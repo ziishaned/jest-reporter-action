@@ -110,7 +110,6 @@ test("tabulate should generate a correct table", function () {
 	const options = {
 		repository: 'example/foo',
 		commit: '2e15bee6fe0df5003389aa5ec894ec0fea2d874a',
-		pr: 42,
 		prefix: '/files/project/',
 	}
 
