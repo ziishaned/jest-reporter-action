@@ -33,10 +33,6 @@ export function tabulate(lcov, options = {}) {
 }
 
 function toFolder(path) {
-	if (path === "") {
-		return ""
-	}
-
 	return tr(td({ colspan: 5 }, b(path)))
 }
 
