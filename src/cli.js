@@ -22,16 +22,13 @@ async function main() {
 		"Total Coverage: ",
 		b(`${percentage(lcov).toFixed(2)}%`),
 		"\n\n",
-		details(
-			summary("Coverage Report"),
-			tabulate(lcov, options),
-		)
+		details(summary("Coverage Report"), tabulate(lcov, options)),
 	)
 
 	console.log(comment)
 }
 
-main().catch(function (err) {
+main().catch(function(err) {
 	console.log(err)
 	process.exit(1)
 })

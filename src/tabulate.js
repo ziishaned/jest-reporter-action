@@ -1,13 +1,13 @@
 import { th, tr, td, table, tbody, a, b, span, fragment } from "./html"
 
 // Tabulate the lcov data in a HTML table.
-export function tabulate (lcov, options = {}) {
+export function tabulate(lcov, options = {}) {
 	const head = tr(
-		th('File'),
-		th('Branches'),
-		th('Funcs'),
-		th('Lines'),
-		th('Uncovered Lines'),
+		th("File"),
+		th("Branches"),
+		th("Funcs"),
+		th("Lines"),
+		th("Uncovered Lines"),
 	)
 
 	const folders = {}
@@ -18,34 +18,26 @@ export function tabulate (lcov, options = {}) {
 		folders[folder].push(file)
 	}
 
-	const rows =
-		Object.keys(folders)
-			.sort()
-			.reduce((acc, key) => [
+	const rows = Object.keys(folders)
+		.sort()
+		.reduce(
+			(acc, key) => [
 				...acc,
 				toFolder(key, options),
 				...folders[key].map(file => toRow(file, options)),
-			], [])
-
-	return table(
-		tbody(
-			head,
-			...rows,
+			],
+			[],
 		)
-	)
+
+	return table(tbody(head, ...rows))
 }
 
-function toFolder (path) {
+function toFolder(path) {
 	if (path === "") {
-			return ""
+		return ""
 	}
 
-	return tr(
-		td(
-			{ colspan: 5 },
-			b(path),
-		)
-	)
+	return tr(td({ colspan: 5 }, b(path)))
 }
 
 function toRow(file, options) {
@@ -63,48 +55,38 @@ function filename(file, options) {
 	const href = `https://github.com/${options.repository}/blob/${options.commit}/${relative}`
 	const parts = relative.split("/")
 	const last = parts[parts.length - 1]
-	return fragment(
-		'&nbsp; &nbsp;',
-		a({ href }, last),
-	)
+	return fragment("&nbsp; &nbsp;", a({ href }, last))
 }
 
 function percentage(item) {
 	if (!item) {
-		return 'N/A'
+		return "N/A"
 	}
 
-	const value = item.found === 0 ? 100 : item.hit / item.found * 100
-	const rounded = value.toFixed(2).replace(/\.0*$/, '')
+	const value = item.found === 0 ? 100 : (item.hit / item.found) * 100
+	const rounded = value.toFixed(2).replace(/\.0*$/, "")
 
-	const tag =
-		value === 100
-			? fragment
-			: b
+	const tag = value === 100 ? fragment : b
 
 	return tag(`${rounded}%`)
 }
 
 function uncovered(file, options) {
-	const branches =
-		(file.branches ? file.branches.details : [])
-			.filter(branch => branch.taken === 0)
-			.map(branch => branch.line)
+	const branches = (file.branches ? file.branches.details : [])
+		.filter(branch => branch.taken === 0)
+		.map(branch => branch.line)
 
-	const lines =
-		(file.lines ? file.lines.details : [])
-			.filter(line => line.hit === 0)
-			.map(line => line.line)
+	const lines = (file.lines ? file.lines.details : [])
+		.filter(line => line.hit === 0)
+		.map(line => line.line)
 
-	const all = [ ...branches, ...lines ].sort()
+	const all = [...branches, ...lines].sort()
 
-	return (
-		all
-			.map(function (line) {
-				const relative = file.file.replace(options.prefix, '')
-				const href = `https://github.com/${options.repository}/blob/${options.commit}/${relative}#L${line}`
-				return a({ href }, line)
-			})
-			.join(", ")
-	)
+	return all
+		.map(function(line) {
+			const relative = file.file.replace(options.prefix, "")
+			const href = `https://github.com/${options.repository}/blob/${options.commit}/${relative}#L${line}`
+			return a({ href }, line)
+		})
+		.join(", ")
 }

@@ -1,8 +1,7 @@
-import { parse, percentage } from './lcov'
+import { parse, percentage } from "./lcov"
 
-test("parse should parse lcov strings correctly", async function () {
-	const data =
-		`
+test("parse should parse lcov strings correctly", async function() {
+	const data = `
 TN:
 SF:/files/project/foo.js
 FN:19,foo
@@ -102,17 +101,19 @@ end_of_record
 					},
 				],
 			},
-		}
+		},
 	])
 })
 
-test("parse should fail on invalid lcov", async function () {
+test("parse should fail on invalid lcov", async function() {
 	await expect(parse("invalid")).rejects.toBe("Failed to parse string")
 })
 
-test("percentage should calculate the correct percentage", function () {
-	expect(percentage([
-		{ lines: { hit: 20, found: 25 }},
-		{ lines: { hit: 10, found: 15 }},
-	])).toBe(75)
+test("percentage should calculate the correct percentage", function() {
+	expect(
+		percentage([
+			{ lines: { hit: 20, found: 25 } },
+			{ lines: { hit: 10, found: 15 } },
+		]),
+	).toBe(75)
 })

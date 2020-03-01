@@ -1,7 +1,7 @@
 import { tabulate } from "./tabulate"
 import { th, tr, td, table, tbody, a, b, span, fragment } from "./html"
 
-test("tabulate should generate a correct table", function () {
+test("tabulate should generate a correct table", function() {
 	const data = [
 		{
 			file: "/files/project/src/foo.js",
@@ -108,54 +108,71 @@ test("tabulate should generate a correct table", function () {
 	]
 
 	const options = {
-		repository: 'example/foo',
-		commit: '2e15bee6fe0df5003389aa5ec894ec0fea2d874a',
-		prefix: '/files/project/',
+		repository: "example/foo",
+		commit: "2e15bee6fe0df5003389aa5ec894ec0fea2d874a",
+		prefix: "/files/project/",
 	}
 
 	const html = table(
 		tbody(
 			tr(
-				th('File'),
-				th('Branches'),
-				th('Funcs'),
-				th('Lines'),
-				th('Uncovered Lines'),
+				th("File"),
+				th("Branches"),
+				th("Funcs"),
+				th("Lines"),
+				th("Uncovered Lines"),
 			),
-			tr(
-				td({ colspan: 5 }, b('src')),
-			),
+			tr(td({ colspan: 5 }, b("src"))),
 			tr(
 				td(
-					'&nbsp; &nbsp;',
-					a({ href: `https://github.com/${options.repository}/blob/${options.commit}/src/foo.js` },
-						'foo.js',
+					"&nbsp; &nbsp;",
+					a(
+						{
+							href: `https://github.com/${options.repository}/blob/${options.commit}/src/foo.js`,
+						},
+						"foo.js",
 					),
 				),
-				td('100%'),
-				td(b('66.67%')),
-				td(b('91.30%')),
+				td("100%"),
+				td(b("66.67%")),
+				td(b("91.30%")),
 				td(
-					a({ href: `https://github.com/${options.repository}/blob/${options.commit}/src/foo.js#L37` }, 37),
-				),
-			),
-			tr(
-				td({ colspan: 5 }, b('src/bar')),
-			),
-			tr(
-				td(
-					'&nbsp; &nbsp;',
-					a({ href: `https://github.com/${options.repository}/blob/${options.commit}/src/bar/baz.js` },
-						'baz.js',
+					a(
+						{
+							href: `https://github.com/${options.repository}/blob/${options.commit}/src/foo.js#L37`,
+						},
+						37,
 					),
 				),
-				td('N/A'),
-				td(b('66.67%')),
-				td(b('50%')),
+			),
+			tr(td({ colspan: 5 }, b("src/bar"))),
+			tr(
 				td(
-					a({ href: `https://github.com/${options.repository}/blob/${options.commit}/src/bar/baz.js#L20` }, 20),
+					"&nbsp; &nbsp;",
+					a(
+						{
+							href: `https://github.com/${options.repository}/blob/${options.commit}/src/bar/baz.js`,
+						},
+						"baz.js",
+					),
+				),
+				td("N/A"),
+				td(b("66.67%")),
+				td(b("50%")),
+				td(
+					a(
+						{
+							href: `https://github.com/${options.repository}/blob/${options.commit}/src/bar/baz.js#L20`,
+						},
+						20,
+					),
 					", ",
-					a({ href: `https://github.com/${options.repository}/blob/${options.commit}/src/bar/baz.js#L21` }, 21),
+					a(
+						{
+							href: `https://github.com/${options.repository}/blob/${options.commit}/src/bar/baz.js#L21`,
+						},
+						21,
+					),
 				),
 			),
 		),

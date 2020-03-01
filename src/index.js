@@ -30,10 +30,7 @@ async function main() {
 		"Total Coverage: ",
 		b(`${percentage(lcov).toFixed(2)}%`),
 		"\n\n",
-		details(
-			summary("Coverage Report"),
-			tabulate(lcov, options),
-		)
+		details(summary("Coverage Report"), tabulate(lcov, options)),
 	)
 
 	await new GitHub(token).issues.createComment({
@@ -50,7 +47,7 @@ async function eventData() {
 	return JSON.parse(data)
 }
 
-main().catch(function (err) {
+main().catch(function(err) {
 	console.log(err)
 	core.setFailed(err.message)
 })
