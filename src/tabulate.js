@@ -1,4 +1,3 @@
-import { tree } from "./tree"
 import { th, tr, td, table, tbody, a, b, span, fragment } from "./html"
 
 // Tabulate the lcov data in a HTML table.
@@ -10,8 +9,23 @@ export function tabulate (lcov, options = {}) {
 		th('Lines'),
 		th('Uncovered Lines'),
 	)
-	const t = tree(lcov, options)
-	const rows = walk(t, 0, '', options)
+
+	const folders = {}
+	for (const file of lcov) {
+		const parts = file.file.replace(options.prefix, "").split("/")
+		const folder = parts.slice(0, -1).join("/")
+		folders[folder] = folders[folder] || []
+		folders[folder].push(file)
+	}
+
+	const rows =
+		Object.keys(folders)
+			.sort()
+			.reduce((acc, key) => [
+				...acc,
+				toFolder(key, options),
+				...folders[key].map(file => toRow(file, options)),
+			], [])
 
 	return table(
 		tbody(
@@ -21,26 +35,7 @@ export function tabulate (lcov, options = {}) {
 	)
 }
 
-function walk(tree, depth, prefix, options) {
-	return (
-		Object.keys(tree)
-			.map(function (key) {
-				const item = tree[key]
-				if (item.file) {
-					return toRow(item, options)
-				}
-
-				const onlyFolders = Object.values(item).filter(item => Boolean(item.file)).length === 0
-				const head = onlyFolders ? "" : toFolder(prefix, key, depth)
-				const rest = walk(item, depth + 1, `${prefix}/${key}`, options)
-
-				return head + rest.join("")
-			})
-	)
-}
-
-function toFolder (prefix, key, depth) {
-	const path = `${prefix}/${key}`.replace(/^\//, "")
+function toFolder (path) {
 	if (path === "") {
 			return ""
 	}

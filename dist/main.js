@@ -22760,27 +22760,6 @@ function percentage(lcov) {
 	return (hit / found) * 100
 }
 
-function tree(files, options) {
-	const result = {};
-
-	files.forEach(function (file) {
-		file.file
-			.replace(options.prefix, "")
-			.split("/")
-			.reduce(function (acc, part, index, arr) {
-				if (index === arr.length - 1) {
-					acc[part] = file;
-					return acc[part]
-				}
-
-				acc[part] = acc[part] || {};
-				return acc[part]
-			}, result);
-	});
-
-	return result
-}
-
 function tag(name) {
 	return function (...children) {
 		const props =
@@ -22820,8 +22799,23 @@ function tabulate (lcov, options = {}) {
 		th('Lines'),
 		th('Uncovered Lines'),
 	);
-	const t = tree(lcov, options);
-	const rows = walk(t, 0, '', options);
+
+	const folders = {};
+	for (const file of lcov) {
+		const parts = file.file.replace(options.prefix, "").split("/");
+		const folder = parts.slice(0, -1).join("/");
+		folders[folder] = folders[folder] || [];
+		folders[folder].push(file);
+	}
+
+	const rows =
+		Object.keys(folders)
+			.sort()
+			.reduce((acc, key) => [
+				...acc,
+				toFolder(key),
+				...folders[key].map(file => toRow(file, options)),
+			], []);
 
 	return table(
 		tbody(
@@ -22831,26 +22825,7 @@ function tabulate (lcov, options = {}) {
 	)
 }
 
-function walk(tree, depth, prefix, options) {
-	return (
-		Object.keys(tree)
-			.map(function (key) {
-				const item = tree[key];
-				if (item.file) {
-					return toRow(item, options)
-				}
-
-				const onlyFolders = Object.values(item).filter(item => Boolean(item.file)).length === 0;
-				const head = onlyFolders ? "" : toFolder(prefix, key);
-				const rest = walk(item, depth + 1, `${prefix}/${key}`, options);
-
-				return head + rest.join("")
-			})
-	)
-}
-
-function toFolder (prefix, key, depth) {
-	const path = `${prefix}/${key}`.replace(/^\//, "");
+function toFolder (path) {
 	if (path === "") {
 			return ""
 	}
