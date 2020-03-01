@@ -4,6 +4,14 @@ import { th, tr, td, table, tbody, a, b, span, fragment } from "./html"
 test("tabulate should generate a correct table", function() {
 	const data = [
 		{
+			file: "/files/project/index.js",
+			functions: {
+				found: 0,
+				hit: 0,
+				details: [],
+			},
+		},
+		{
 			file: "/files/project/src/foo.js",
 			lines: {
 				found: 23,
@@ -121,6 +129,20 @@ test("tabulate should generate a correct table", function() {
 				th("Funcs"),
 				th("Lines"),
 				th("Uncovered Lines"),
+			),
+			tr(
+				td(
+					a(
+						{
+							href: `https://github.com/${options.repository}/blob/${options.commit}/index.js`,
+						},
+						"index.js",
+					),
+				),
+				td("N/A"),
+				td("100%"),
+				td("N/A"),
+				td(),
 			),
 			tr(td({ colspan: 5 }, b("src"))),
 			tr(

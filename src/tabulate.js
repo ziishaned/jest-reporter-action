@@ -1,7 +1,7 @@
 import { th, tr, td, table, tbody, a, b, span, fragment } from "./html"
 
 // Tabulate the lcov data in a HTML table.
-export function tabulate(lcov, options = {}) {
+export function tabulate(lcov, options) {
 	const head = tr(
 		th("File"),
 		th("Branches"),
@@ -24,7 +24,7 @@ export function tabulate(lcov, options = {}) {
 			(acc, key) => [
 				...acc,
 				toFolder(key, options),
-				...folders[key].map(file => toRow(file, options)),
+				...folders[key].map(file => toRow(file, key !== "", options)),
 			],
 			[],
 		)
@@ -33,12 +33,16 @@ export function tabulate(lcov, options = {}) {
 }
 
 function toFolder(path) {
+	if (path === "") {
+		return ""
+	}
+
 	return tr(td({ colspan: 5 }, b(path)))
 }
 
-function toRow(file, options) {
+function toRow(file, indent, options) {
 	return tr(
-		td(filename(file, options)),
+		td(filename(file, indent, options)),
 		td(percentage(file.branches, options)),
 		td(percentage(file.functions, options)),
 		td(percentage(file.lines, options)),
@@ -46,12 +50,13 @@ function toRow(file, options) {
 	)
 }
 
-function filename(file, options) {
+function filename(file, indent, options) {
 	const relative = file.file.replace(options.prefix, "")
 	const href = `https://github.com/${options.repository}/blob/${options.commit}/${relative}`
 	const parts = relative.split("/")
 	const last = parts[parts.length - 1]
-	return fragment("&nbsp; &nbsp;", a({ href }, last))
+	const space = indent ? "&nbsp; &nbsp;" : ""
+	return fragment(space, a({ href }, last))
 }
 
 function percentage(item) {
