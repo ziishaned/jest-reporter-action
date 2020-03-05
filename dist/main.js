@@ -22893,16 +22893,18 @@ async function main$1() {
 	}
 
 	const lcov = await parse$2(raw);
-	console.log(JSON.stringify(github_1, null, 2));
+
+	const head = github_1.payload.pull_request.head.ref;
+	const base = github_1.payload.pull_request.base.ref;
 
 	const options = {
-		repository: github_1.github.repository,
-		commit: github_1.github.event.after,
-		prefix: github_1.github.workspace,
+		repository: github_1.payload.repository.full_name,
+		commit: github_1.payload.pull_request.head.sha,
+		prefix: `${process.env.GITHUB_WORKSPACE}/`,
 	};
 
 	const comment = fragment(
-		"Total Coverage: ",
+		`Coverage after merging ${b(head)} into ${b(base)}: `,
 		b(`${percentage(lcov).toFixed(2)}%`),
 		"\n\n",
 		details(summary("Coverage Report"), tabulate(lcov, options)),
@@ -22911,7 +22913,7 @@ async function main$1() {
 	await new github_2(token).issues.createComment({
 		repo: github_1.repo.repo,
 		owner: github_1.repo.owner,
-		issue_number: github_1.gihub.event.pull_request.number,
+		issue_number: github_1.payload.pull_request.number,
 		body: comment,
 	});
 }
