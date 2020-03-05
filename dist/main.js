@@ -22892,13 +22892,13 @@ async function main$1() {
 		return
 	}
 
-	const event = await eventData();
 	const lcov = await parse$2(raw);
+	console.log(JSON.stringify(github_1, null, 2));
 
 	const options = {
-		repository: `${github_1.repo.owner}/${github_1.repo.repo}`,
-		commit: event.after,
-		prefix: `${process.env.GITHUB_WORKSPACE}/`,
+		repository: github_1.github.repository,
+		commit: github_1.github.event.after,
+		prefix: github_1.github.workspace,
 	};
 
 	const comment = fragment(
@@ -22911,15 +22911,9 @@ async function main$1() {
 	await new github_2(token).issues.createComment({
 		repo: github_1.repo.repo,
 		owner: github_1.repo.owner,
-		issue_number: event.pull_request.number,
+		issue_number: github_1.gihub.event.pull_request.number,
 		body: comment,
 	});
-}
-
-// Read the eventData from the GITHUB_EVENT_PATH
-async function eventData() {
-	const data = await fs.promises.readFile(process.env.GITHUB_EVENT_PATH, "utf-8");
-	return JSON.parse(data)
 }
 
 main$1().catch(function(err) {
