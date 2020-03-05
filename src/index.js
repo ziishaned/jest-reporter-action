@@ -2,9 +2,8 @@ import { promises as fs } from "fs"
 import core from "@actions/core"
 import { GitHub, context } from "@actions/github"
 
-import { parse, percentage } from "./lcov"
-import { tabulate } from "./tabulate"
-import { details, summary, b, fragment, table, tbody, tr, th } from "./html"
+import { parse } from "./lcov"
+import { comment } from "./comment"
 
 async function main() {
 	const token = core.getInput("github-token")
@@ -17,29 +16,22 @@ async function main() {
 		return
 	}
 
-	const lcov = await parse(raw)
-
-	const head = context.payload.pull_request.head.ref
-	const base = context.payload.pull_request.base.ref
-
 	const options = {
 		repository: context.payload.repository.full_name,
 		commit: context.payload.pull_request.head.sha,
 		prefix: `${process.env.GITHUB_WORKSPACE}/`,
+		head: context.payload.pull_request.head.ref,
+		base: context.payload.pull_request.base.ref,
 	}
 
-	const comment = fragment(
-		`Coverage after merging ${b(head)} into ${b(base)}`,
-		table(tbody(tr(th(percentage(lcov).toFixed(2), "%")))),
-		"\n\n",
-		details(summary("Coverage Report"), tabulate(lcov, options)),
-	)
+	const lcov = await parse(raw)
+	const body = comment(lcov, options)
 
 	await new GitHub(token).issues.createComment({
 		repo: context.repo.repo,
 		owner: context.repo.owner,
 		issue_number: context.payload.pull_request.number,
-		body: comment,
+		body: comment(lcov, options),
 	})
 }
 

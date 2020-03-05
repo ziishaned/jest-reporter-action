@@ -2,9 +2,8 @@ import process from "process"
 import { promises as fs } from "fs"
 import path from "path"
 
-import { parse, percentage } from "./lcov"
-import { tabulate } from "./tabulate"
-import { details, summary, b, fragment } from "./html"
+import { parse } from "./lcov"
+import { comment } from "./comment"
 
 async function main() {
 	const file = process.argv[2]
@@ -16,16 +15,11 @@ async function main() {
 		repository: "example/foo",
 		commit: "f9d42291812ed03bb197e48050ac38ac6befe4e5",
 		prefix,
+		head: "feat/test",
+		base: "master",
 	}
 
-	const comment = fragment(
-		"Total Coverage: ",
-		b(`${percentage(lcov).toFixed(2)}%`),
-		"\n\n",
-		details(summary("Coverage Report"), tabulate(lcov, options)),
-	)
-
-	console.log(comment)
+	console.log(comment(lcov, options))
 }
 
 main().catch(function(err) {
