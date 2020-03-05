@@ -22904,8 +22904,8 @@ async function main$1() {
 	};
 
 	const comment = fragment(
-		`Coverage after merging ${b(head)} into ${b(base)}: `,
-		b(`${percentage(lcov).toFixed(2)}%`),
+		`Coverage after merging ${b(head)} into ${b(base)}`,
+		table(tbody(tr(th(percentage(lcov).toFixed(2), "%")))),
 		"\n\n",
 		details(summary("Coverage Report"), tabulate(lcov, options)),
 	);

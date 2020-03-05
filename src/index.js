@@ -4,7 +4,7 @@ import { GitHub, context } from "@actions/github"
 
 import { parse, percentage } from "./lcov"
 import { tabulate } from "./tabulate"
-import { details, summary, b, fragment } from "./html"
+import { details, summary, b, fragment, table, tbody, tr, th } from "./html"
 
 async function main() {
 	const token = core.getInput("github-token")
@@ -29,8 +29,8 @@ async function main() {
 	}
 
 	const comment = fragment(
-		`Coverage after merging ${b(head)} into ${b(base)}: `,
-		b(`${percentage(lcov).toFixed(2)}%`),
+		`Coverage after merging ${b(head)} into ${b(base)}`,
+		table(tbody(tr(th(percentage(lcov).toFixed(2), "%")))),
 		"\n\n",
 		details(summary("Coverage Report"), tabulate(lcov, options)),
 	)
