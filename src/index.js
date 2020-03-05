@@ -18,16 +18,18 @@ async function main() {
 	}
 
 	const lcov = await parse(raw)
-	console.log(JSON.stringify(context, null, 2))
+
+	const head = context.payload.pull_request.head.ref
+	const base = context.payload.pull_request.base.ref
 
 	const options = {
-		repository: context.github.repository,
-		commit: context.github.event.after,
-		prefix: context.github.workspace,
+		repository: context.payload.repository.full_name,
+		commit: context.payload.pull_request.head.sha,
+		prefix: `${process.env.GITHUB_WORKSPACE}/`,
 	}
 
 	const comment = fragment(
-		"Total Coverage: ",
+		`Coverage after merging ${b(head)} into ${b(base)}: `,
 		b(`${percentage(lcov).toFixed(2)}%`),
 		"\n\n",
 		details(summary("Coverage Report"), tabulate(lcov, options)),
@@ -36,7 +38,7 @@ async function main() {
 	await new GitHub(token).issues.createComment({
 		repo: context.repo.repo,
 		owner: context.repo.owner,
-		issue_number: context.gihub.event.pull_request.number,
+		issue_number: context.payload.pull_request.number,
 		body: comment,
 	})
 }
