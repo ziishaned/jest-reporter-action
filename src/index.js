@@ -37,7 +37,7 @@ async function main() {
 		repo: context.repo.repo,
 		owner: context.repo.owner,
 		issue_number: context.payload.pull_request.number,
-		body: comment(lcov, options),
+		body: diff(lcov, baselcov, options),
 	})
 }
 

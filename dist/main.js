@@ -22881,7 +22881,7 @@ function uncovered(file, options) {
 		.join(", ")
 }
 
-function comment$1 (lcov, options) {
+function comment (lcov, options) {
 	return fragment(
 		`Coverage after merging ${b(options.head)} into ${b(options.base)}`,
 		table(tbody(tr(th(percentage(lcov).toFixed(2), "%")))),
@@ -22892,7 +22892,7 @@ function comment$1 (lcov, options) {
 
 function diff(lcov, before, options) {
 	if (!before) {
-		return comment$1(lcov, options)
+		return comment(lcov, options)
 	}
 
 	const pbefore = percentage(before);
@@ -22949,7 +22949,7 @@ async function main$1() {
 		repo: github_1.repo.repo,
 		owner: github_1.repo.owner,
 		issue_number: github_1.payload.pull_request.number,
-		body: comment(lcov, options),
+		body: diff(lcov, baselcov, options),
 	});
 }
 
