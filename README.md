@@ -23,6 +23,10 @@ action runner, use `${{ secrets.GITHUB_TOKEN }}`.
 The location of the lcov file to read the coverage report from. Defaults to
 `./coverage/lcov.info`.
 
+##### `lcov-base` (**Optional**)
+The location of the lcov file resulting from running the tests in the base
+branch. When this is set a diff of the coverage percentages is shown.
+
 ## Example usage
 
 ```yml

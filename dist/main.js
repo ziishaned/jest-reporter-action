@@ -22881,7 +22881,7 @@ function uncovered(file, options) {
 		.join(", ")
 }
 
-function comment (lcov, options) {
+function comment$1 (lcov, options) {
 	return fragment(
 		`Coverage after merging ${b(options.head)} into ${b(options.base)}`,
 		table(tbody(tr(th(percentage(lcov).toFixed(2), "%")))),
@@ -22890,15 +22890,47 @@ function comment (lcov, options) {
 	)
 }
 
+function diff(lcov, before, options) {
+	if (!before) {
+		return comment$1(lcov, options)
+	}
+
+	const pbefore = percentage(before);
+	const pafter = percentage(lcov);
+	const pdiff = pafter - pbefore;
+	const plus = pdiff > 0 ? "+" : "";
+	const arrow =
+		pdiff === 0
+			? ""
+			: pdiff < 0
+				? "▾"
+				: "▴";
+
+	return fragment(
+		`Coverage after merging ${b(options.head)} into ${b(options.base)}`,
+		table(tbody(tr(
+			th(pafter.toFixed(2), "%"),
+			th(arrow, " ", plus, pdiff.toFixed(2), "%"),
+		))),
+		"\n\n",
+		details(summary("Coverage Report"), tabulate(lcov, options)),
+	)
+}
+
 async function main$1() {
 	const token = core$1.getInput("github-token");
 	const lcovFile = core$1.getInput("lcov-file") || "./coverage/lcov.info";
+	const baseFile = core$1.getInput("lcov-base");
 
 	const raw = await fs.promises.readFile(lcovFile, "utf-8").catch(err => null);
-
 	if (!raw) {
 		console.log(`No coverage report found at '${lcovFile}', exiting...`);
 		return
+	}
+
+	const baseRaw = baseFile && await fs.promises.readFile(baseFile, "utf-8").catch(err => null);
+	if (baseFile && !baseRaw) {
+		console.log(`No coverage report found at '${baseFile}', ignoring...`);
 	}
 
 	const options = {
@@ -22910,7 +22942,8 @@ async function main$1() {
 	};
 
 	const lcov = await parse$2(raw);
-	const body = comment(lcov, options);
+	const baselcov = baseRaw && await parse$2(baseRaw);
+	const body = diff(lcov, baselcov, options);
 
 	await new github_2(token).issues.createComment({
 		repo: github_1.repo.repo,
