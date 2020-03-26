@@ -5,6 +5,8 @@ const { GitHub, context } = require("@actions/github");
 const main = async () => {
   const repoName = context.repo.repo;
   const repoOwner = context.repo.owner;
+  console.log(context.issue.number);
+
   const githubToken = core.getInput("github-token");
   const testCommand = core.getInput("test-command") || "npx jest";
 
@@ -35,7 +37,7 @@ const main = async () => {
     repo: repoName,
     owner: repoOwner,
     body: commentBody,
-    issue_number: prNumber,
+    issue_number: prNumber
   });
 };
 
