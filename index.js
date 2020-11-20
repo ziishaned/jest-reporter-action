@@ -16,7 +16,9 @@ const main = async () => {
       commit_sha: context.sha
     }
   );
-  const prNumber = commitPRs.data[0].number;
+  const pr = commitPRs.data[0];
+  if(!pr) return; // This is not a PR, nothing to comment
+  const prNumber = pr.number;
 
   const codeCoverage = execSync(testCommand).toString();
   let coveragePercentage = execSync(
