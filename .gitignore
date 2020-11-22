@@ -1,1 +1,5 @@
 # node_modules - have to be checked in!
+coverage/
+yarn-error.log 
+
+

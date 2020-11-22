@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "composite": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "lib": [
+      "ESNext"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2018"
+  },
+  "include": [
+    "src",
+    "testing"
+  ]
+}

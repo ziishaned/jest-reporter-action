@@ -3,9 +3,10 @@
   "version": "0.1.3",
   "description": "Comments a pull request with the jest code coverage",
   "main": "index.js",
+  "license": "AGPL-3.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ziishaned/jest-reporter-action"
+    "url": "git+https://github.com/dxos/jest-reporter-action"
   },
   "keywords": [
     "actions",
@@ -13,13 +14,26 @@
     "comment",
     "message"
   ],
-  "author": "Zeeshan Ahmad",
+  "author": "DXOS.org",
   "bugs": {
-    "url": "https://github.com/ziishaned/jest-reporter-action/issues"
+    "url": "https://github.com/dxos/jest-reporter-action/issues"
   },
-  "homepage": "https://github.com/ziishaned/jest-reporter-action#readme",
   "dependencies": {
     "@actions/core": "^1.2.0",
-    "@actions/github": "^1.1.0"
+    "@actions/github": "^1.1.0",
+    "@octokit/core": "^3.2.1",
+    "watch": "^1.0.2"
+  },
+  "scripts": {
+    "test": "jest --rootDir ./testing --verbose"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.2"
+  },
+  "jest": {
+    "preset": "ts-jest/presets/default",
+    "testEnvironment": "node"
   }
 }
