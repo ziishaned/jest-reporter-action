@@ -2,7 +2,7 @@
   "name": "jest-reporter-action",
   "version": "0.1.3",
   "description": "Comments a pull request with the jest code coverage",
-  "main": "index.js",
+  "main": "src/index.js",
   "license": "AGPL-3.0",
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
     "watch": "^1.0.2"
   },
   "scripts": {
-    "test": "jest --rootDir ./testing --verbose"
+    "test": "jest --rootDir . --verbose --coverage"
   },
   "devDependencies": {
     "jest": "^26.6.3",
