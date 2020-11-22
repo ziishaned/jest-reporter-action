@@ -17,7 +17,7 @@ This action comments a pull request with the jest code coverage
 ## Example usage
 
 ```yml
-uses: ziishaned/jest-reporter-action@v0.0.1
+uses: dxos/jest-reporter-action@v0.1.3
 with:
   github-token: ${{ secrets.GITHUB_TOKEN }}
   test-command: "yarn jest --coverage"
