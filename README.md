@@ -1,4 +1,4 @@
-# Jest reporter action
+# Lcov reporter action
 
 This action comments a pull request with a HTML test coverage report.
 
