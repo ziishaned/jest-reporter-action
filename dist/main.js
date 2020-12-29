@@ -22870,15 +22870,47 @@ function uncovered(file, options) {
 		.filter(line => line.hit === 0)
 		.map(line => line.line);
 
-	const all = [...branches, ...lines].sort();
+	const all = ranges([...branches, ...lines]);
+
 
 	return all
-		.map(function(line) {
+		.map(function(range) {
+			const fragment = range.start === range.end ? `L${range.start}` : `L${range.start}-L${range.end}`;
 			const relative = file.file.replace(options.prefix, "");
-			const href = `https://github.com/${options.repository}/blob/${options.commit}/${relative}#L${line}`;
-			return a({ href }, line)
+			const href = `https://github.com/${options.repository}/blob/${options.commit}/${relative}#${fragment}`;
+			const text = range.start === range.end ? range.start : `${range.start}&ndash;${range.end}`;
+
+			return a({ href }, text)
 		})
 		.join(", ")
+}
+
+function ranges(linenos) {
+	const res = [];
+
+	let last = null;
+
+	linenos.sort().forEach(function(lineno) {
+		if (last === null) {
+			last = { start: lineno, end: lineno };
+			return
+		}
+
+		if (last.end + 1 === lineno) {
+			last.end = lineno;
+			return
+		}
+
+		res.push(last);
+		last = { start: lineno, end: lineno };
+	});
+
+	if (last) {
+		res.push(last);
+	}
+
+	console.log(linenos, res);
+	return res
 }
 
 function comment (lcov, options) {

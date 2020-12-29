@@ -89,8 +89,8 @@ test("tabulate should generate a correct table", function() {
 						hit: 0,
 					},
 					{
-						line: 22,
-						hit: 3,
+						line: 27,
+						hit: 0,
 					},
 				],
 			},
@@ -184,16 +184,16 @@ test("tabulate should generate a correct table", function() {
 				td(
 					a(
 						{
-							href: `https://github.com/${options.repository}/blob/${options.commit}/src/bar/baz.js#L20`,
+							href: `https://github.com/${options.repository}/blob/${options.commit}/src/bar/baz.js#L20-L21`,
 						},
-						20,
+						'20&ndash;21',
 					),
-					", ",
+					', ',
 					a(
 						{
-							href: `https://github.com/${options.repository}/blob/${options.commit}/src/bar/baz.js#L21`,
+							href: `https://github.com/${options.repository}/blob/${options.commit}/src/bar/baz.js#L27`,
 						},
-						21,
+						'27',
 					),
 				),
 			),
