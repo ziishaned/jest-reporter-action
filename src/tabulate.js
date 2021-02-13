@@ -133,6 +133,5 @@ function ranges(linenos) {
 		res.push(last)
 	}
 
-	console.log(linenos, res)
 	return res
 }
