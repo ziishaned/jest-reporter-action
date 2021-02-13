@@ -125,6 +125,7 @@ test("tabulate should generate a correct table", function() {
 		tbody(
 			tr(
 				th("File"),
+				th("Stmts"),
 				th("Branches"),
 				th("Funcs"),
 				th("Lines"),
@@ -139,12 +140,13 @@ test("tabulate should generate a correct table", function() {
 						"index.js",
 					),
 				),
+				td("100%"),
 				td("N/A"),
 				td("100%"),
 				td("N/A"),
 				td(),
 			),
-			tr(td({ colspan: 5 }, b("src"))),
+			tr(td({ colspan: 6 }, b("src"))),
 			tr(
 				td(
 					"&nbsp; &nbsp;",
@@ -155,6 +157,7 @@ test("tabulate should generate a correct table", function() {
 						"foo.js",
 					),
 				),
+				td(b("89.66%")),
 				td("100%"),
 				td(b("66.67%")),
 				td(b("91.30%")),
@@ -167,7 +170,7 @@ test("tabulate should generate a correct table", function() {
 					),
 				),
 			),
-			tr(td({ colspan: 5 }, b("src/bar"))),
+			tr(td({ colspan: 6 }, b("src/bar"))),
 			tr(
 				td(
 					"&nbsp; &nbsp;",
@@ -178,6 +181,7 @@ test("tabulate should generate a correct table", function() {
 						"baz.js",
 					),
 				),
+				td(b("53.85%")),
 				td("N/A"),
 				td(b("66.67%")),
 				td(b("50%")),

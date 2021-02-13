@@ -42,14 +42,18 @@ function toFolder(path) {
 }
 
 function getStatement(file) {
-	const { branches, functions, lines } = file;
-	return [branches, functions, lines].reduce((prev, curr) => ({
-		hit: prev.hit + (curr.hit || 0),
-		found: prev.found + (curr.found || 0),
-	}), {
-		hit: 0,
-		found: 0,
-	})
+	const { branches, functions, lines } = file
+
+	return [branches, functions, lines].reduce(function(acc, curr) {
+		if (!curr) {
+			return acc
+		}
+
+		return {
+			hit: acc.hit + curr.hit,
+			found: acc.found + curr.found,
+		}
+	}, { hit: 0, found: 0 })
 }
 
 function toRow(file, indent, options) {
