@@ -38,7 +38,7 @@ function toFolder(path) {
 		return ""
 	}
 
-	return tr(td({ colspan: 5 }, b(path)))
+	return tr(td({ colspan: 6 }, b(path)))
 }
 
 function getStatement(file) {
