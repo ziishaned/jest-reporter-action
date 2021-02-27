@@ -8,10 +8,9 @@ const main = async () => {
 
   const githubClient = new GitHub(githubToken);
   const result = await githubClient.repos.listPullRequestsAssociatedWithCommit({
-    repo, owner, commit_sha: context.sha
+    repo, owner, commit_sha: context.payload.after
   });
   console.log(JSON.stringify(result));
-  console.log({repo, owner, context, sha: context.sha});
   if (!result.data || !result.data.length) {
     return true;
   }
