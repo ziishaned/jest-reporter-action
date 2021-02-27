@@ -8,10 +8,13 @@ const main = async () => {
   console.log({githubToken, coverage});
 
   const githubClient = new GitHub(githubToken);
-  const commitPRs = await githubClient.repos.listPullRequestsAssociatedWithCommit({
+  const result = await githubClient.repos.listPullRequestsAssociatedWithCommit({
     repo, owner, commit_sha: context.sha
   });
-  const issue_number = commitPRs.data[0].number;
+  if (!result.data || !result.data.length) {
+    return true;
+  }
+  const issue_number = result.data[0].number;
   const percentage = JSON.parse(coverage).result.covered_percent;
   const body = `<p>Total Coverage: <code>${percentage}</code>`;
 
