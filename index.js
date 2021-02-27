@@ -10,13 +10,12 @@ const main = async () => {
   const result = await githubClient.repos.listPullRequestsAssociatedWithCommit({
     repo, owner, commit_sha: context.payload.after
   });
-  console.log(JSON.stringify(result));
   if (!result.data || !result.data.length) {
     return true;
   }
   const issue_number = result.data[0].number;
   const percentage = JSON.parse(coverage).result.covered_percent;
-  const body = `<p>Total Coverage: <code>${percentage}</code>`;
+  const body = `<p>Total Coverage: <strong>${percentage}</strong></p>`;
 
   await githubClient.issues.createComment({repo, owner, body, issue_number});
 };
