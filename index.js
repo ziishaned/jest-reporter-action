@@ -5,6 +5,7 @@ const main = async () => {
   const {repo, owner} = context.repo;
   const githubToken = core.getInput('github-token');
   const coverage = core.getInput('coverage');
+  console.log({githubToken, coverage});
 
   const githubClient = new GitHub(githubToken);
   const commitPRs = await githubClient.repos.listPullRequestsAssociatedWithCommit({
