@@ -5,12 +5,12 @@ const main = async () => {
   const {repo, owner} = context.repo;
   const githubToken = core.getInput('github-token');
   const coverage = core.getInput('coverage');
-  console.log({githubToken, coverage});
 
   const githubClient = new GitHub(githubToken);
   const result = await githubClient.repos.listPullRequestsAssociatedWithCommit({
     repo, owner, commit_sha: context.sha
   });
+  console.log(JSON.stringify(result));
   if (!result.data || !result.data.length) {
     return true;
   }
