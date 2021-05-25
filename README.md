@@ -16,8 +16,8 @@ Total Coverage: <b>99.39%</b>
 ## Inputs
 
 ##### `github-token` (**Required**)
-Github token used for posting the comment. To use the key provided by the GitHub
-action runner, use `${{ secrets.GITHUB_TOKEN }}`.
+Github token used for posting the comment. Defaults to `${{ github.token }}`.
+For alternative `github-token` see: [Creating Personal Access Tokens](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
 ##### `lcov-file` (**Optional**)
 The location of the lcov file to read the coverage report from. Defaults to
@@ -32,7 +32,6 @@ branch. When this is set a diff of the coverage percentages is shown.
 ```yml
 uses: romeovs/lcov-reporter-action@v0.2.16
 with:
-  github-token: ${{ secrets.GITHUB_TOKEN }}
   lcov-file: ./coverage/lcov.info
 ```
 
