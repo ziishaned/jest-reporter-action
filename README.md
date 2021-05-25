@@ -17,7 +17,8 @@ Total Coverage: <b>99.39%</b>
 
 ##### `github-token` (**Required**)
 Github token used for posting the comment. Defaults to `${{ github.token }}`.
-For alternative `github-token` see: [Creating Personal Access Tokens](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+
+For alternative `github-token` value see: [Creating Personal Access Tokens](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
 ##### `lcov-file` (**Optional**)
 The location of the lcov file to read the coverage report from. Defaults to
