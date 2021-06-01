@@ -8,6 +8,7 @@ inputs:
   github-token:
     description: Github token
     required: true
+    default: ${{ github.token }}
   lcov-file:
     description: The location of the lcov.info file
     required: false
