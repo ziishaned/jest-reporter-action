@@ -22523,7 +22523,7 @@ const CORE_PLUGINS = [
 
 var rest = core$3.plugin(CORE_PLUGINS);
 
-var context$1 = createCommonjsModule(function (module, exports) {
+var context = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
@@ -22570,8 +22570,8 @@ exports.Context = Context;
 
 });
 
-unwrapExports(context$1);
-var context_1 = context$1.Context;
+unwrapExports(context);
+var context_1 = context.Context;
 
 var github = createCommonjsModule(function (module, exports) {
 var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
@@ -22588,7 +22588,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Originally pulled from https://github.com/JasonEtco/actions-toolkit/blob/master/src/github.ts
 
 const rest_1 = __importDefault(rest);
-const Context = __importStar(context$1);
+const Context = __importStar(context);
 // We need this in order to extend Octokit
 rest_1.default.prototype = new rest_1.default();
 exports.context = new Context.Context();
@@ -23010,8 +23010,8 @@ function diff(lcov, before, options) {
 }
 
 // Get list of changed files
-async function getChangedFiles(githubClient, options) {
-	if (!options.baseCommit || !options.baseCommit) {
+async function getChangedFiles(githubClient, options, context) {
+	if (!options.commit || !options.baseCommit) {
 		core_7(
 			`The base and head commits are missing from the payload for this ${context.eventName} event.`,
 		);
@@ -23122,7 +23122,7 @@ async function main$1() {
 	options.title = title;
 
 	if (shouldFilterChangedFiles) {
-		options.changedFiles = getChangedFiles(githubClient, options);
+		options.changedFiles = getChangedFiles(githubClient, options, github_1);
 	}
 
 	const lcov = await parse$2(raw);

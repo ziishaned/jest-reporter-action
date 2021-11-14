@@ -1,8 +1,8 @@
 import * as core from "@actions/core"
 
 // Get list of changed files
-export async function getChangedFiles(githubClient, options) {
-	if (!options.baseCommit || !options.baseCommit) {
+export async function getChangedFiles(githubClient, options, context) {
+	if (!options.commit || !options.baseCommit) {
 		core.setFailed(
 			`The base and head commits are missing from the payload for this ${context.eventName} event.`,
 		)
