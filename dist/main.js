@@ -22523,7 +22523,7 @@ const CORE_PLUGINS = [
 
 var rest = core$3.plugin(CORE_PLUGINS);
 
-var context = createCommonjsModule(function (module, exports) {
+var context$1 = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
@@ -22570,8 +22570,8 @@ exports.Context = Context;
 
 });
 
-unwrapExports(context);
-var context_1 = context.Context;
+unwrapExports(context$1);
+var context_1 = context$1.Context;
 
 var github = createCommonjsModule(function (module, exports) {
 var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
@@ -22588,7 +22588,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Originally pulled from https://github.com/JasonEtco/actions-toolkit/blob/master/src/github.ts
 
 const rest_1 = __importDefault(rest);
-const Context = __importStar(context);
+const Context = __importStar(context$1);
 // We need this in order to extend Octokit
 rest_1.default.prototype = new rest_1.default();
 exports.context = new Context.Context();
@@ -22784,6 +22784,7 @@ const b = tag("b");
 const table = tag("table");
 const tbody = tag("tbody");
 const a = tag("a");
+const h2 = tag("h2");
 
 const fragment = function(...children) {
 	return children.join("")
@@ -22801,7 +22802,8 @@ function tabulate(lcov, options) {
 	);
 
 	const folders = {};
-	for (const file of lcov) {
+	for (const file of filteredLcov(lcov, options)) {
+		file.file = normalisePath(file.file);
 		const parts = file.file.replace(options.prefix, "").split("/");
 		const folder = parts.slice(0, -1).join("/");
 		folders[folder] = folders[folder] || [];
@@ -22822,6 +22824,17 @@ function tabulate(lcov, options) {
 	return table(tbody(head, ...rows))
 }
 
+function normalisePath(file) {
+	return file.replace(/\\/g, "/")
+}
+
+function filteredLcov(lcov, options) {
+	if (!options.shouldFilterChangedFiles) {
+		return lcov
+	}
+	return lcov.filter(file => options.changedFiles.includes(file.file))
+}
+
 function toFolder(path) {
 	if (path === "") {
 		return ""
@@ -22833,16 +22846,19 @@ function toFolder(path) {
 function getStatement(file) {
 	const { branches, functions, lines } = file;
 
-	return [branches, functions, lines].reduce(function(acc, curr) {
-		if (!curr) {
-			return acc
-		}
+	return [branches, functions, lines].reduce(
+		function(acc, curr) {
+			if (!curr) {
+				return acc
+			}
 
-		return {
-			hit: acc.hit + curr.hit,
-			found: acc.found + curr.found,
-		}
-	}, { hit: 0, found: 0 })
+			return {
+				hit: acc.hit + curr.hit,
+				found: acc.found + curr.found,
+			}
+		},
+		{ hit: 0, found: 0 },
+	)
 }
 
 function toRow(file, indent, options) {
@@ -22889,13 +22905,18 @@ function uncovered(file, options) {
 
 	const all = ranges([...branches, ...lines]);
 
-
 	return all
 		.map(function(range) {
-			const fragment = range.start === range.end ? `L${range.start}` : `L${range.start}-L${range.end}`;
+			const fragment =
+				range.start === range.end
+					? `L${range.start}`
+					: `L${range.start}-L${range.end}`;
 			const relative = file.file.replace(options.prefix, "");
 			const href = `https://github.com/${options.repository}/blob/${options.commit}/${relative}#${fragment}`;
-			const text = range.start === range.end ? range.start : `${range.start}&ndash;${range.end}`;
+			const text =
+				range.start === range.end
+					? range.start
+					: `${range.start}&ndash;${range.end}`;
 
 			return a({ href }, text)
 		})
@@ -22929,14 +22950,24 @@ function ranges(linenos) {
 	return res
 }
 
-function comment (lcov, options) {
+function comment(lcov, options) {
 	return fragment(
+		options.title ? h2(options.title) : "",
 		options.base
-			? `Coverage after merging ${b(options.head)} into ${b(options.base)}`
+			? `Coverage after merging ${b(options.head)} into ${b(
+					options.base,
+			  )} will be`
 			: `Coverage for this commit`,
 		table(tbody(tr(th(percentage(lcov).toFixed(2), "%")))),
 		"\n\n",
-		details(summary("Coverage Report"), tabulate(lcov, options)),
+		details(
+			summary(
+				options.shouldFilterChangedFiles
+					? "Coverage Report for Changed Files"
+					: "Coverage Report",
+			),
+			tabulate(lcov, options),
+		),
 	)
 }
 
@@ -22949,30 +22980,115 @@ function diff(lcov, before, options) {
 	const pafter = percentage(lcov);
 	const pdiff = pafter - pbefore;
 	const plus = pdiff > 0 ? "+" : "";
-	const arrow =
-		pdiff === 0
-			? ""
-			: pdiff < 0
-				? "▾"
-				: "▴";
+	const arrow = pdiff === 0 ? "" : pdiff < 0 ? "▾" : "▴";
 
 	return fragment(
+		options.title ? h2(options.title) : "",
 		options.base
-			? `Coverage after merging ${b(options.head)} into ${b(options.base)}`
+			? `Coverage after merging ${b(options.head)} into ${b(
+					options.base,
+			  )} will be`
 			: `Coverage for this commit`,
-		table(tbody(tr(
-			th(pafter.toFixed(2), "%"),
-			th(arrow, " ", plus, pdiff.toFixed(2), "%"),
-		))),
+		table(
+			tbody(
+				tr(
+					th(pafter.toFixed(2), "%"),
+					th(arrow, " ", plus, pdiff.toFixed(2), "%"),
+				),
+			),
+		),
 		"\n\n",
-		details(summary("Coverage Report"), tabulate(lcov, options)),
+		details(
+			summary(
+				options.shouldFilterChangedFiles
+					? "Coverage Report for Changed Files"
+					: "Coverage Report",
+			),
+			tabulate(lcov, options),
+		),
 	)
 }
 
+// Get list of changed files
+async function getChangedFiles(githubClient, options) {
+	if (!options.baseCommit || !options.baseCommit) {
+		core_7(
+			`The base and head commits are missing from the payload for this ${context.eventName} event.`,
+		);
+	}
+
+	// Use GitHub's compare two commits API.
+	// https://developer.github.com/v3/repos/commits/#compare-two-commits
+	const response = await githubClient.repos.compareCommits({
+		base: options.baseCommit,
+		head: options.commit,
+		owner: context.repo.owner,
+		repo: context.repo.repo,
+	});
+
+	if (response.status !== 200) {
+		core_7(
+			`The GitHub API for comparing the base and head commits for this ${context.eventName} event returned ${response.status}, expected 200.`,
+		);
+	}
+
+	return response.data.files
+		.filter(file => file.status == "modified" || file.status == "added")
+		.map(file => file.filename)
+}
+
+const REQUESTED_COMMENTS_PER_PAGE = 20;
+
+async function deleteOldComments(github, context) {
+	const existingComments = await getExistingComments(github, context);
+	for (const comment of existingComments) {
+		core_8(`Deleting comment: ${comment.id}`);
+		try {
+			await github.issues.deleteComment({
+				owner: context.repo.owner,
+				repo: context.repo.repo,
+				comment_id: comment.id,
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	}
+}
+
+async function getExistingComments(github, context) {
+	let page = 0;
+	let results = [];
+	let response;
+	do {
+		response = await github.issues.listComments({
+			issue_number: context.issue.number,
+			owner: context.repo.owner,
+			repo: context.repo.repo,
+			per_page: REQUESTED_COMMENTS_PER_PAGE,
+			page: page,
+		});
+		results = results.concat(response.data);
+		page++;
+	} while (response.data.length === REQUESTED_COMMENTS_PER_PAGE)
+
+	return results.filter(
+		comment =>
+			!!comment.user &&
+			comment.user.login === "github-actions[bot]" &&
+			comment.body.includes("Coverage Report"),
+	)
+}
+
+const MAX_COMMENT_CHARS = 65536;
+
 async function main$1() {
 	const token = core$1.getInput("github-token");
+	const githubClient = new github_2(token);
 	const lcovFile = core$1.getInput("lcov-file") || "./coverage/lcov.info";
 	const baseFile = core$1.getInput("lcov-base");
+	const shouldFilterChangedFiles = core$1.getInput("filter-changed-files");
+	const shouldDeleteOldComments = core$1.getInput("delete-old-comments");
+	const title = core$1.getInput("title");
 
 	const raw = await fs.promises.readFile(lcovFile, "utf-8").catch(err => null);
 	if (!raw) {
@@ -22980,7 +23096,8 @@ async function main$1() {
 		return
 	}
 
-	const baseRaw = baseFile && await fs.promises.readFile(baseFile, "utf-8").catch(err => null);
+	const baseRaw =
+		baseFile && (await fs.promises.readFile(baseFile, "utf-8").catch(err => null));
 	if (baseFile && !baseRaw) {
 		console.log(`No coverage report found at '${baseFile}', ignoring...`);
 	}
@@ -22992,30 +23109,44 @@ async function main$1() {
 
 	if (github_1.eventName === "pull_request") {
 		options.commit = github_1.payload.pull_request.head.sha;
+		options.baseCommit = github_1.payload.pull_request.base.sha;
 		options.head = github_1.payload.pull_request.head.ref;
 		options.base = github_1.payload.pull_request.base.ref;
 	} else if (github_1.eventName === "push") {
 		options.commit = github_1.payload.after;
+		options.baseCommit = github_1.payload.before;
 		options.head = github_1.ref;
 	}
 
+	options.shouldFilterChangedFiles = shouldFilterChangedFiles;
+	options.title = title;
+
+	if (shouldFilterChangedFiles) {
+		options.changedFiles = getChangedFiles(githubClient, options);
+	}
+
 	const lcov = await parse$2(raw);
-	const baselcov = baseRaw && await parse$2(baseRaw);
-	const body = diff(lcov, baselcov, options);
+	const baselcov = baseRaw && (await parse$2(baseRaw));
+	const body = diff(lcov, baselcov, options)
+		.substring(0, MAX_COMMENT_CHARS);
+
+	if (shouldDeleteOldComments) {
+		await deleteOldComments(githubClient, github_1);
+	}
 
 	if (github_1.eventName === "pull_request") {
-		await new github_2(token).issues.createComment({
+		await githubClient.issues.createComment({
 			repo: github_1.repo.repo,
 			owner: github_1.repo.owner,
 			issue_number: github_1.payload.pull_request.number,
-			body: diff(lcov, baselcov, options),
+			body: body,
 		});
 	} else if (github_1.eventName === "push") {
-		await new github_2(token).repos.createCommitComment({
+		await githubClient.repos.createCommitComment({
 			repo: github_1.repo.repo,
 			owner: github_1.repo.owner,
 			commit_sha: options.commit,
-			body: diff(lcov, baselcov, options),
+			body: body,
 		});
 	}
 }
