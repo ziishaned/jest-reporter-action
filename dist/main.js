@@ -23122,7 +23122,7 @@ async function main$1() {
 	options.title = title;
 
 	if (shouldFilterChangedFiles) {
-		options.changedFiles = getChangedFiles(githubClient, options, github_1);
+		options.changedFiles = await getChangedFiles(githubClient, options, github_1);
 	}
 
 	const lcov = await parse$2(raw);

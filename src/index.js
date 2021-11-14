@@ -50,7 +50,7 @@ async function main() {
 	options.title = title
 
 	if (shouldFilterChangedFiles) {
-		options.changedFiles = getChangedFiles(githubClient, options, context)
+		options.changedFiles = await getChangedFiles(githubClient, options, context)
 	}
 
 	const lcov = await parse(raw)
