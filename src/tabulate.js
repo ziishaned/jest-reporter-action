@@ -42,6 +42,8 @@ function filteredLcov(lcov, options) {
 	if (!options.shouldFilterChangedFiles) {
 		return lcov
 	}
+	console.log(`Changed files ${options.changedFiles}`)
+	console.log(`Report files ${lcov.map(file => file.file)}`)
 	return lcov.filter(file => options.changedFiles.includes(file.file))
 }
 
