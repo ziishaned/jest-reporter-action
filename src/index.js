@@ -6,9 +6,9 @@ import { parse } from "./lcov"
 import { diff } from "./comment"
 import { getChangedFiles } from "./get_changes"
 import { deleteOldComments } from "./delete_old_comments"
-import { normalisePath } from "./util";
+import { normalisePath } from "./util"
 
-const MAX_COMMENT_CHARS = 65536;
+const MAX_COMMENT_CHARS = 65536
 
 async function main() {
 	const token = core.getInput("github-token")
@@ -56,8 +56,7 @@ async function main() {
 
 	const lcov = await parse(raw)
 	const baselcov = baseRaw && (await parse(baseRaw))
-	const body = diff(lcov, baselcov, options)
-		.substring(0, MAX_COMMENT_CHARS);
+	const body = diff(lcov, baselcov, options).substring(0, MAX_COMMENT_CHARS)
 
 	if (shouldDeleteOldComments) {
 		await deleteOldComments(githubClient, options, context)

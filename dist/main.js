@@ -23083,7 +23083,7 @@ async function getExistingComments(github, options, context) {
 	return results.filter(
 		comment =>
 			!!comment.user &&
-            (!!options.title || comment.body.includes(options.title)) &&
+            (!options.title || comment.body.includes(options.title)) &&
 			comment.body.includes("Coverage Report"),
 	)
 }

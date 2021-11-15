@@ -1,6 +1,6 @@
 import * as core from "@actions/core"
 
-const REQUESTED_COMMENTS_PER_PAGE = 20;
+const REQUESTED_COMMENTS_PER_PAGE = 20
 
 export async function deleteOldComments(github, options, context) {
 	const existingComments = await getExistingComments(github, options, context)
@@ -37,7 +37,7 @@ async function getExistingComments(github, options, context) {
 	return results.filter(
 		comment =>
 			!!comment.user &&
-            (!!options.title || comment.body.includes(options.title)) &&
+			(!options.title || comment.body.includes(options.title)) &&
 			comment.body.includes("Coverage Report"),
 	)
 }

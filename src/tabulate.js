@@ -1,5 +1,5 @@
 import { th, tr, td, table, tbody, a, b, span, fragment } from "./html"
-import { normalisePath } from "./util";
+import { normalisePath } from "./util"
 
 // Tabulate the lcov data in a HTML table.
 export function tabulate(lcov, options) {
@@ -38,17 +38,16 @@ function filterAndNormaliseLcov(lcov, options) {
 	return lcov
 		.map(file => ({
 			...file,
-			file: normalisePath(file.file)
+			file: normalisePath(file.file),
 		}))
-		.filter(file =>
-			shouldBeIncluded(file.file, options))
+		.filter(file => shouldBeIncluded(file.file, options))
 }
 
 function shouldBeIncluded(fileName, options) {
 	if (!options.shouldFilterChangedFiles) {
 		return true
 	}
-	return options.changedFiles.includes(fileName.replace(options.prefix, ""));
+	return options.changedFiles.includes(fileName.replace(options.prefix, ""))
 }
 
 function toFolder(path) {
