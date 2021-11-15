@@ -22790,6 +22790,10 @@ const fragment = function(...children) {
 	return children.join("")
 };
 
+function normalisePath(file) {
+	return file.replace(/\\/g, "/")
+}
+
 // Tabulate the lcov data in a HTML table.
 function tabulate(lcov, options) {
 	const head = tr(
@@ -22802,8 +22806,6 @@ function tabulate(lcov, options) {
 	);
 
 	const folders = {};
-	console.log(`Changed files: ${options.changedFiles}`);
-	console.log(`Prefix: ${options.prefix}`);
 	for (const file of filterAndNormaliseLcov(lcov, options)) {
 		const parts = file.file.replace(options.prefix, "").split("/");
 		const folder = parts.slice(0, -1).join("/");
@@ -22835,15 +22837,11 @@ function filterAndNormaliseLcov(lcov, options) {
 			shouldBeIncluded(file.file, options))
 }
 
-function normalisePath(file) {
-	return file.replace(/\\/g, "/")
-}
-
 function shouldBeIncluded(fileName, options) {
 	if (!options.shouldFilterChangedFiles) {
 		return true
 	}
-	return options.changedFiles.some(changedFile => fileName.endsWith(changedFile));
+	return options.changedFiles.includes(fileName.replace(options.prefix, ""));
 }
 
 function toFolder(path) {
@@ -23115,7 +23113,7 @@ async function main$1() {
 
 	const options = {
 		repository: github_1.payload.repository.full_name,
-		prefix: `${process.env.GITHUB_WORKSPACE}/`,
+		prefix: normalisePath(`${process.env.GITHUB_WORKSPACE}/`),
 	};
 
 	if (github_1.eventName === "pull_request") {

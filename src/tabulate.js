@@ -1,4 +1,5 @@
 import { th, tr, td, table, tbody, a, b, span, fragment } from "./html"
+import { normalisePath } from "./util";
 
 // Tabulate the lcov data in a HTML table.
 export function tabulate(lcov, options) {
@@ -12,8 +13,6 @@ export function tabulate(lcov, options) {
 	)
 
 	const folders = {}
-	console.log(`Changed files: ${options.changedFiles}`)
-	console.log(`Prefix: ${options.prefix}`)
 	for (const file of filterAndNormaliseLcov(lcov, options)) {
 		const parts = file.file.replace(options.prefix, "").split("/")
 		const folder = parts.slice(0, -1).join("/")
@@ -45,15 +44,11 @@ function filterAndNormaliseLcov(lcov, options) {
 			shouldBeIncluded(file.file, options))
 }
 
-function normalisePath(file) {
-	return file.replace(/\\/g, "/")
-}
-
 function shouldBeIncluded(fileName, options) {
 	if (!options.shouldFilterChangedFiles) {
 		return true
 	}
-	return options.changedFiles.some(changedFile => fileName.endsWith(changedFile));
+	return options.changedFiles.includes(fileName.replace(options.prefix, ""));
 }
 
 function toFolder(path) {

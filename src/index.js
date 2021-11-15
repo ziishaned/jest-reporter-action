@@ -6,6 +6,7 @@ import { parse } from "./lcov"
 import { diff } from "./comment"
 import { getChangedFiles } from "./get_changes"
 import { deleteOldComments } from "./delete_old_comments"
+import { normalisePath } from "./util";
 
 const MAX_COMMENT_CHARS = 65536;
 
@@ -32,7 +33,7 @@ async function main() {
 
 	const options = {
 		repository: context.payload.repository.full_name,
-		prefix: `${process.env.GITHUB_WORKSPACE}/`,
+		prefix: normalisePath(`${process.env.GITHUB_WORKSPACE}/`),
 	}
 
 	if (context.eventName === "pull_request") {
