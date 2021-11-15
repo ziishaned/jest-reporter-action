@@ -60,7 +60,7 @@ async function main() {
 		.substring(0, MAX_COMMENT_CHARS);
 
 	if (shouldDeleteOldComments) {
-		await deleteOldComments(githubClient, context)
+		await deleteOldComments(githubClient, options, context)
 	}
 
 	if (context.eventName === "pull_request") {

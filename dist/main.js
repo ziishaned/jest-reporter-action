@@ -23048,8 +23048,8 @@ async function getChangedFiles(githubClient, options, context) {
 
 const REQUESTED_COMMENTS_PER_PAGE = 20;
 
-async function deleteOldComments(github, context) {
-	const existingComments = await getExistingComments(github, context);
+async function deleteOldComments(github, options, context) {
+	const existingComments = await getExistingComments(github, options, context);
 	for (const comment of existingComments) {
 		core_8(`Deleting comment: ${comment.id}`);
 		try {
@@ -23064,7 +23064,7 @@ async function deleteOldComments(github, context) {
 	}
 }
 
-async function getExistingComments(github, context) {
+async function getExistingComments(github, options, context) {
 	let page = 0;
 	let results = [];
 	let response;
@@ -23083,7 +23083,7 @@ async function getExistingComments(github, context) {
 	return results.filter(
 		comment =>
 			!!comment.user &&
-			comment.user.login === "github-actions[bot]" &&
+            (!!options.title || comment.body.includes(options.title)) &&
 			comment.body.includes("Coverage Report"),
 	)
 }
@@ -23140,7 +23140,7 @@ async function main$1() {
 		.substring(0, MAX_COMMENT_CHARS);
 
 	if (shouldDeleteOldComments) {
-		await deleteOldComments(githubClient, github_1);
+		await deleteOldComments(githubClient, options, github_1);
 	}
 
 	if (github_1.eventName === "pull_request") {

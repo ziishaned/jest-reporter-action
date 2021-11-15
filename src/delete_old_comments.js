@@ -2,8 +2,8 @@ import * as core from "@actions/core"
 
 const REQUESTED_COMMENTS_PER_PAGE = 20;
 
-export async function deleteOldComments(github, context) {
-	const existingComments = await getExistingComments(github, context)
+export async function deleteOldComments(github, options, context) {
+	const existingComments = await getExistingComments(github, options, context)
 	for (const comment of existingComments) {
 		core.debug(`Deleting comment: ${comment.id}`)
 		try {
@@ -18,7 +18,7 @@ export async function deleteOldComments(github, context) {
 	}
 }
 
-async function getExistingComments(github, context) {
+async function getExistingComments(github, options, context) {
 	let page = 0
 	let results = []
 	let response
@@ -37,7 +37,7 @@ async function getExistingComments(github, context) {
 	return results.filter(
 		comment =>
 			!!comment.user &&
-			comment.user.login === "github-actions[bot]" &&
+            (!!options.title || comment.body.includes(options.title)) &&
 			comment.body.includes("Coverage Report"),
 	)
 }
