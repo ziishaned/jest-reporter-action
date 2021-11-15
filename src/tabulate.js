@@ -12,7 +12,8 @@ export function tabulate(lcov, options) {
 	)
 
 	const folders = {}
-	console.log(`Changed files ${options.changedFiles}`)
+	console.log(`Changed files: ${options.changedFiles}`)
+	console.log(`Prefix: ${options.prefix}`)
 	for (const file of filterAndNormaliseLcov(lcov, options)) {
 		const parts = file.file.replace(options.prefix, "").split("/")
 		const folder = parts.slice(0, -1).join("/")
@@ -52,9 +53,7 @@ function shouldBeIncluded(fileName, options) {
 	if (!options.shouldFilterChangedFiles) {
 		return true
 	}
-	const fileNameWithoutPrefix = fileName.replace(options.prefix, "")
-	console.log(`File in report: ${fileNameWithoutPrefix}`)
-	return options.changedFiles.includes(fileNameWithoutPrefix);
+	return options.changedFiles.some(changedFile => fileName.endsWith(changedFile));
 }
 
 function toFolder(path) {
