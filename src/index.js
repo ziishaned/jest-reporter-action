@@ -15,8 +15,10 @@ async function main() {
 	const githubClient = new GitHub(token)
 	const lcovFile = core.getInput("lcov-file") || "./coverage/lcov.info"
 	const baseFile = core.getInput("lcov-base")
-	const shouldFilterChangedFiles = core.getInput("filter-changed-files")
-	const shouldDeleteOldComments = core.getInput("delete-old-comments")
+	const shouldFilterChangedFiles =
+		core.getInput("filter-changed-files").toLowerCase() === "true"
+	const shouldDeleteOldComments =
+		core.getInput("delete-old-comments").toLowerCase() === "true"
 	const title = core.getInput("title")
 
 	const raw = await fs.readFile(lcovFile, "utf-8").catch(err => null)

@@ -22831,17 +22831,16 @@ function filterAndNormaliseLcov(lcov, options) {
 	return lcov
 		.map(file => ({
 			...file,
-			file: normalisePath(file.file)
+			file: normalisePath(file.file),
 		}))
-		.filter(file =>
-			shouldBeIncluded(file.file, options))
+		.filter(file => shouldBeIncluded(file.file, options))
 }
 
 function shouldBeIncluded(fileName, options) {
 	if (!options.shouldFilterChangedFiles) {
 		return true
 	}
-	return options.changedFiles.includes(fileName.replace(options.prefix, ""));
+	return options.changedFiles.includes(fileName.replace(options.prefix, ""))
 }
 
 function toFolder(path) {
@@ -23083,7 +23082,7 @@ async function getExistingComments(github, options, context) {
 	return results.filter(
 		comment =>
 			!!comment.user &&
-            (!options.title || comment.body.includes(options.title)) &&
+			(!options.title || comment.body.includes(options.title)) &&
 			comment.body.includes("Coverage Report"),
 	)
 }
@@ -23095,8 +23094,8 @@ async function main$1() {
 	const githubClient = new github_2(token);
 	const lcovFile = core$1.getInput("lcov-file") || "./coverage/lcov.info";
 	const baseFile = core$1.getInput("lcov-base");
-	const shouldFilterChangedFiles = core$1.getInput("filter-changed-files");
-	const shouldDeleteOldComments = core$1.getInput("delete-old-comments");
+	const shouldFilterChangedFiles = core$1.getInput("filter-changed-files").toLowerCase() === 'true';
+	const shouldDeleteOldComments = core$1.getInput("delete-old-comments").toLowerCase() === 'true';
 	const title = core$1.getInput("title");
 
 	const raw = await fs.promises.readFile(lcovFile, "utf-8").catch(err => null);
@@ -23136,8 +23135,7 @@ async function main$1() {
 
 	const lcov = await parse$2(raw);
 	const baselcov = baseRaw && (await parse$2(baseRaw));
-	const body = diff(lcov, baselcov, options)
-		.substring(0, MAX_COMMENT_CHARS);
+	const body = diff(lcov, baselcov, options).substring(0, MAX_COMMENT_CHARS);
 
 	if (shouldDeleteOldComments) {
 		await deleteOldComments(githubClient, options, github_1);
