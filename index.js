@@ -17,12 +17,9 @@ const main = async () => {
   ).toString();
   coveragePercentage = parseFloat(coveragePercentage).toFixed(2);
 
-  const commentBody = `<p>Total Coverage: <code>${coveragePercentage}</code></p>
-<details><summary>Coverage report</summary>
-<p>
-<pre>${codeCoverage}</pre>
-</p>
-</details>`;
+  const commentBody = `#### Total Coverage: ${coveragePercentage}
+
+<pre>${codeCoverage}</pre>`;
 
   await githubClient.issues.createComment({
     repo: repoName,
